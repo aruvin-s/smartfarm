@@ -17,7 +17,7 @@ import {
 import loginImage from '../assets/loginimage.png';
 import logo from '../assets/logowhite.png';
 
-const Login = () => {
+const Register = () => {
   const bgForm = useColorModeValue('white', 'navy.800');
   const titleColor = useColorModeValue('gray.700', 'blue.500');
   const textColor = useColorModeValue('gray.700', 'white');
@@ -132,4 +132,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
