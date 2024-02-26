@@ -6,11 +6,8 @@ import {
   Flex,
   FormControl,
   FormLabel,
-  HStack,
-  Icon,
   Input,
   Link,
-  Switch,
   Text,
   useColorModeValue,
 } from '@chakra-ui/react';
@@ -18,12 +15,8 @@ import loginImage from '../assets/loginimage.png';
 import logo from '../assets/logowhite.png';
 
 const Login = () => {
-  const bgForm = useColorModeValue('white', 'navy.800');
   const titleColor = useColorModeValue('gray.700', 'blue.500');
   const textColor = useColorModeValue('gray.700', 'white');
-  const colorIcons = useColorModeValue('gray.700', 'white');
-  const bgIcons = useColorModeValue('transparent', 'navy.700');
-  const bgIconsHover = useColorModeValue('gray.50', 'whiteAlpha.100');
 
   return (
     <Flex
