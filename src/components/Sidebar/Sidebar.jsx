@@ -27,7 +27,7 @@ import {
 } from "../Scrollbar/Scrollbar.jsx";
 import { HSeparator } from "../Separator/Separator";
 import { SidebarHelp } from "./SidebarHelp";
-import React from "react";
+import React, { useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { NavLink, useLocation } from "react-router-dom";
 
@@ -49,6 +49,11 @@ function Sidebar(props) {
   const { colorMode } = useColorMode;
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const { sidebarVariant } = props;
+  const [menuItems, setMenuItems] = useState([
+    { name: "Dashboard", icon: "HamburgerIcon" },
+    { name: "Settings", icon: "HamburgerIcon" },
+    { name: "Help", icon: "HamburgerIcon" },
+  ]);
   const createLinks = (routes) => {
     // Chakra Color Mode
     let activeBg = useColorModeValue("white", "navy.700");
@@ -56,150 +61,43 @@ function Sidebar(props) {
     let activeColor = useColorModeValue("gray.700", "white");
     let inactiveColor = useColorModeValue("gray.400", "gray.400");
     let sidebarActiveShadow = "0px 7px 11px rgba(0, 0, 0, 0.04)";
-    // return routes.map((prop, key) => {
-    //   if (prop.redirect) {
-    //     return null;
-    //   }
-    //   if (prop.category) {
-    //     var st = {};
-    //     st[prop["state"]] = !state[prop.state];
-    //     return (
-    //       <>
-    //         <Text
-    //           color={activeColor}
-    //           fontWeight="bold"
-    //           mb={{
-    //             xl: "6px",
-    //           }}
-    //           mx="auto"
-    //           ps={{
-    //             sm: "10px",
-    //             xl: "16px",
-    //           }}
-    //           py="12px"
-    //         >
-    //           {document.documentElement.dir === "rtl"
-    //             ? prop.rtlName
-    //             : prop.name}
-    //         </Text>
-    //         {createLinks(prop.views)}
-    //       </>
-    //     );
-    //   }
-    //   return (
-    //     <NavLink to={prop.layout + prop.path} key={key}>
-    //       {activeRoute(prop.layout + prop.path) === "active" ? (
-    //         <Button
-    //           boxSize="initial"
-    //           justifyContent="flex-start"
-    //           alignItems="center"
-    //           boxShadow={sidebarActiveShadow}
-    //           bg={activeBg}
-    //           transition={variantChange}
-    //           mb={{
-    //             xl: "6px",
-    //           }}
-    //           mx={{
-    //             xl: "auto",
-    //           }}
-    //           ps={{
-    //             sm: "10px",
-    //             xl: "16px",
-    //           }}
-    //           py="12px"
-    //           borderRadius="15px"
-    //           _hover="none"
-    //           w="100%"
-    //           _active={{
-    //             bg: "inherit",
-    //             transform: "none",
-    //             borderColor: "transparent",
-    //           }}
-    //           _focus={{
-    //             boxShadow: "0px 7px 11px rgba(0, 0, 0, 0.04)",
-    //           }}
-    //         >
-    //           <Flex>
-    //             {typeof prop.icon === "string" ? (
-    //               <Icon>{prop.icon}</Icon>
-    //             ) : (
-    //               <IconBox
-    //                 bg="blue.500"
-    //                 color="white"
-    //                 h="30px"
-    //                 w="30px"
-    //                 me="12px"
-    //                 transition={variantChange}
-    //               >
-    //                 {prop.icon}
-    //               </IconBox>
-    //             )}
-    //             <Text color={activeColor} my="auto" fontSize="sm">
-    //               {document.documentElement.dir === "rtl"
-    //                 ? prop.rtlName
-    //                 : prop.name}
-    //             </Text>
-    //           </Flex>
-    //         </Button>
-    //       ) : (
-    //         <Button
-    //           boxSize="initial"
-    //           justifyContent="flex-start"
-    //           alignItems="center"
-    //           bg="transparent"
-    //           mb={{
-    //             xl: "6px",
-    //           }}
-    //           mx={{
-    //             xl: "auto",
-    //           }}
-    //           py="12px"
-    //           ps={{
-    //             sm: "10px",
-    //             xl: "16px",
-    //           }}
-    //           borderRadius="15px"
-    //           _hover="none"
-    //           w="100%"
-    //           _active={{
-    //             bg: "inherit",
-    //             transform: "none",
-    //             borderColor: "transparent",
-    //           }}
-    //           _focus={{
-    //             boxShadow: "none",
-    //           }}
-    //         >
-    //           <Flex>
-    //             {typeof prop.icon === "string" ? (
-    //               <Icon>{prop.icon}</Icon>
-    //             ) : (
-    //               <IconBox
-    //                 bg={inactiveBg}
-    //                 color="blue.500"
-    //                 h="30px"
-    //                 w="30px"
-    //                 me="12px"
-    //                 transition={variantChange}
-    //               >
-    //                 {prop.icon}
-    //               </IconBox>
-    //             )}
-    //             <Text color={inactiveColor} my="auto" fontSize="sm">
-    //               {document.documentElement.dir === "rtl"
-    //                 ? prop.rtlName
-    //                 : prop.name}
-    //             </Text>
-    //           </Flex>
-    //         </Button>
-    //       )}
-    //     </NavLink>
-    //   );
-    // });
+    const createLinks = () => {
+      return menuItems.map((item, key) => (
+        <Button
+          key={key}
+          boxSize="initial"
+          justifyContent="flex-start"
+          alignItems="center"
+          bg="transparent"
+          mb={{ xl: "6px" }}
+          mx={{ xl: "auto" }}
+          py="12px"
+          ps={{ sm: "10px", xl: "16px" }}
+          borderRadius="15px"
+          _hover="none"
+          w="100%"
+          _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+          _focus={{ boxShadow: "none" }}
+        >
+          <Flex>
+            {typeof item.icon === "string" ? (
+              <Icon>{item.icon}</Icon>
+            ) : (
+              <IconBox bg="blue.500" color="white" h="30px" w="30px" me="12px">
+                {item.icon}
+              </IconBox>
+            )}
+            <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
+              {item.name}
+            </Text>
+          </Flex>
+        </Button>
+      ));
+    };
+    
   };
   const { logo, routes } = props;
 
-  var links = <>{createLinks(routes)}</>;
   //  BRAND
   //  Chakra Color Mode
   let sidebarBg = useColorModeValue("white", "navy.800");
@@ -253,7 +151,7 @@ function Sidebar(props) {
           >
             <Box>{brand}</Box>
             <Stack direction="column" mb="40px">
-              <Box>{links}</Box>
+              <Box>{createLinks()}</Box>
             </Stack>
             <SidebarHelp sidebarVariant={sidebarVariant} />
           </Scrollbars>
