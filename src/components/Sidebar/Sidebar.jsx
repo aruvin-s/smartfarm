@@ -89,10 +89,12 @@ function Sidebar(props) {
         >
           <Flex>
             {typeof item.icon === "string" ? (
-              <WalletIcon h={"24px"} w={"24px"} color="gray.400" me="12px" />
+              <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
+              <WalletIcon h={"24px"} w={"24px"} />
+              </IconBox>
             ) : (
-              <IconBox bg="blue.500" color="white" h="30px" w="30px" me="12px">
-              <WalletIcon h={"24px"} w={"24px"} color="gray.400" />
+              <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
+              <WalletIcon h={"24px"} w={"24px"} />
               </IconBox>
             )}
             <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
