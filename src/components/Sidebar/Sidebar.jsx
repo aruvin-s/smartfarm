@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import { HamburgerIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, Icon } from "@chakra-ui/icons";
 // chakra imports
 import {
   Box,
@@ -18,6 +18,12 @@ import {
 } from "@chakra-ui/react";
 import IconBox from "../Icons/IconBox";
 import {
+  CartIcon,
+  DocumentIcon,
+  GlobeIcon,
+  WalletIcon,
+} from "../Icons/Icons.jsx";
+import {
   renderThumbDark,
   renderThumbLight,
   renderTrack,
@@ -30,6 +36,7 @@ import { SidebarHelp } from "./SidebarHelp";
 import React, { useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
 import { NavLink, useLocation } from "react-router-dom";
+import sidebarLogo from "../../assets/logoSidebar.png";
 
 
 
@@ -50,19 +57,20 @@ function Sidebar(props) {
   // this function creates the links and collapses that appear in the sidebar (left menu)
   const { sidebarVariant } = props;
   const [menuItems, setMenuItems] = useState([
-    { name: "Dashboard", icon: "HamburgerIcon" },
-    { name: "Settings", icon: "HamburgerIcon" },
-    { name: "Help", icon: "HamburgerIcon" },
+    { name: "Dashboard", icon: "CartIcon" },
+    { name: "Produk", icon: "HamburgerIcon" },
+    { name: "Pengaturan", icon: "HamburgerIcon" },
+    { name: "Penyimpanan", icon: "HamburgerIcon" },
+    { name: "Cuaca", icon: "HamburgerIcon" }
   ]);
-  const createLinks = (routes) => {
+  const createLinks = () => {
     // Chakra Color Mode
     let activeBg = useColorModeValue("white", "navy.700");
     let inactiveBg = useColorModeValue("white", "navy.700");
     let activeColor = useColorModeValue("gray.700", "white");
     let inactiveColor = useColorModeValue("gray.400", "gray.400");
     let sidebarActiveShadow = "0px 7px 11px rgba(0, 0, 0, 0.04)";
-    const createLinks = () => {
-      return menuItems.map((item, key) => (
+    return menuItems.map((item, key) => (
         <Button
           key={key}
           boxSize="initial"
@@ -81,10 +89,10 @@ function Sidebar(props) {
         >
           <Flex>
             {typeof item.icon === "string" ? (
-              <Icon>{item.icon}</Icon>
+              <WalletIcon h={"24px"} w={"24px"} color="gray.400" me="12px" />
             ) : (
               <IconBox bg="blue.500" color="white" h="30px" w="30px" me="12px">
-                {item.icon}
+              <WalletIcon h={"24px"} w={"24px"} color="gray.400" />
               </IconBox>
             )}
             <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
@@ -93,8 +101,6 @@ function Sidebar(props) {
           </Flex>
         </Button>
       ));
-    };
-    
   };
   const { logo, routes } = props;
 
@@ -104,58 +110,66 @@ function Sidebar(props) {
   let sidebarRadius = "20px";
   let sidebarMargins = "0px";
   var brand = (
-    <Box pt={"25px"} mb="12px">
-      {logo}
+    <Box pt={"25px"}>
+      <Box mx="auto" width="100px">
+        <img src={sidebarLogo} alt="Sidebar Logo" style={{ width: "100%", height: "auto" }} />
+      </Box>
       <HSeparator my="26px" />
     </Box>
   );
 
   // SIDEBAR
   return (
-    <Box ref={mainPanel}>
-      <Box display={{ sm: "none", xl: "block" }} position="fixed">
-        <Box
-          bg={sidebarBg}
-          transition={variantChange}
-          w="260px"
-          maxW="260px"
-          ms={{
-            sm: "16px",
-          }}
-          my={{
-            sm: "16px",
-          }}
-          h="calc(100vh - 32px)"
-          ps="20px"
-          pe="20px"
-          m={sidebarMargins}
-          filter="drop-shadow(0px 5px 14px rgba(0, 0, 0, 0.05))"
-          borderRadius={sidebarRadius}
+    <Box display={{ sm: "none", xl: "block" }} position="fixed">
+      <Box
+        bg={sidebarBg}
+        transition={variantChange}
+        w="260px"
+        maxW="260px"
+        ms={{
+          sm: "16px",
+        }}
+        my={{
+          sm: "16px",
+        }}
+        h="calc(100vh - 32px)"
+        ps="20px"
+        pe="20px"
+        m={sidebarMargins}
+        filter="drop-shadow(0px 5px 14px rgba(0, 0, 0, 0.05))"
+        borderRadius={sidebarRadius}
+        display="flex"
+        flexDirection="column"
+        alignItems="center" // Center items horizontally
+        justifyContent="space-between" // Align items evenly along the vertical axis
+      >
+        <Scrollbars
+          autoHide
+          renderTrackVertical={
+            document.documentElement.dir === "rtl"
+              ? renderTrackRTL
+              : renderTrack
+          }
+          renderThumbVertical={useColorModeValue(
+            renderThumbLight,
+            renderThumbDark
+          )}
+          renderView={
+            document.documentElement.dir === "rtl"
+              ? renderViewRTL
+              : renderView
+          }
         >
-          <Scrollbars
-            autoHide
-            renderTrackVertical={
-              document.documentElement.dir === "rtl"
-                ? renderTrackRTL
-                : renderTrack
-            }
-            renderThumbVertical={useColorModeValue(
-              renderThumbLight,
-              renderThumbDark
-            )}
-            renderView={
-              document.documentElement.dir === "rtl"
-                ? renderViewRTL
-                : renderView
-            }
-          >
-            <Box>{brand}</Box>
-            <Stack direction="column" mb="40px">
-              <Box>{createLinks()}</Box>
-            </Stack>
-            <SidebarHelp sidebarVariant={sidebarVariant} />
-          </Scrollbars>
-        </Box>
+          <Box>{brand}</Box>
+          <Stack direction="column" mb="40px">
+            <Box>{createLinks()}</Box>
+          </Stack>
+          <Box width="100%" textAlign="center"> {/* Container for the button */}
+            <Button variant='danger' maxH='30px' w="80%">
+              Keluar
+            </Button>
+          </Box>
+        </Scrollbars>
       </Box>
     </Box>
   );
@@ -332,8 +346,10 @@ export function SidebarResponsive(props) {
   //  BRAND
 
   var brand = (
-    <Box pt={"35px"} mb="8px">
-      {logo}
+    <Box pt={"25px"}>
+      <Box mx="auto" width="100px">
+        <img src={sidebarLogo} alt="Sidebar Logo" style={{ width: "100%", height: "auto" }} />
+      </Box>
       <HSeparator my="26px" />
     </Box>
   );

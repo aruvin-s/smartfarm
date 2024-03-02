@@ -25,7 +25,6 @@ import {
         mb="22px"
         mt="auto"
         mx='20px'>
-        <Image src={SidebarHelpImage} w='110px' h="auto" />
         <Flex direction='column' textAlign='center'>
           <Text fontSize='14px' color={textColor} fontWeight='bold'>
             Need help?
