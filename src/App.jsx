@@ -1,10 +1,10 @@
-import ProductList from './pages/ProductList'
+import AddProduct from './pages/AddProduct'
 
 function App() {
 
   return (
       <div>
-        <ProductList />
+        <AddProduct />
       </div>
   )
 }
