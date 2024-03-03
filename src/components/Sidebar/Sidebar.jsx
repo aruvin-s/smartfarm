@@ -164,7 +164,33 @@ function Sidebar(props) {
         >
           <Box>{brand}</Box>
           <Stack direction="column" mb="40px">
-            <Box>{createLinks()}</Box>
+            <Box>
+              {createLinks()}
+              <Button
+                  boxSize="initial"
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  bg="transparent"
+                  mb={{ xl: "6px" }}
+                  mx={{ xl: "auto" }}
+                  py="12px"
+                  ps={{ sm: "10px", xl: "16px" }}
+                  borderRadius="15px"
+                  _hover="none"
+                  w="100%"
+                  _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+                  _focus={{ boxShadow: "none" }}
+                >
+                  <Flex>
+                      <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
+                      <WalletIcon h={"24px"} w={"24px"} />
+                      </IconBox>
+                    <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
+                      Testing
+                    </Text>
+                  </Flex>
+                </Button>
+            </Box>
           </Stack>
           <Box width="100%" textAlign="center"> {/* Container for the button */}
             <Button variant='danger' maxH='30px' w="80%">

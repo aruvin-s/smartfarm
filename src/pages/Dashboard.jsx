@@ -27,6 +27,7 @@ import {
 import IconBox from "../components/Icons/IconBox.jsx";
 import Card from "../components/Card/Card.jsx";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import DonutChart from "../components/Chart/DonutChart.jsx";
 
 export default function Dashboard() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -36,12 +37,27 @@ export default function Dashboard() {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const textTableColor = useColorModeValue("gray.500", "white");
 
+  const chartData = [44, 55, 41, 17, 15];
+  const chartOptions = {
+    labels: ["Tomato", "Potato", "Carrot", "Cabbage", "Apple"],
+    legend: {
+      position: 'bottom',
+      horizontalAlign: 'center',
+      offsetY: 10, // Adjust as needed to vertically position the legend labels
+      itemMargin: {
+        vertical: 5 // Adjust as needed to increase or decrease spacing between legend items
+      }
+    }
+  };
+  
+  
+
   const { colorMode } = useColorMode();
 
   return (
     <Flex>
       <Sidebar />
-      <Flex direction="column" ml={300} width="80%">
+      <Flex direction="column" ml={300} width="80%" height="100vh">
         <Flex>
           <SimpleGrid
               columns={{ sm: 1, md: 2, xl: 3 }}
@@ -196,7 +212,7 @@ export default function Dashboard() {
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
                 Log Aktivitas
               </Text>
-              <Button variant='primary' maxH='30px'>
+              <Button variant='dark' maxH='30px'>
                 SEE ALL
               </Button>
             </Flex>
@@ -219,6 +235,76 @@ export default function Dashboard() {
                   </Tr>
                 </Thead>
                 <Tbody>
+                  <Tr key="placeholder">
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Produk A
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      10
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      2023-03-08
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Log aktivitas untuk Produk A
+                    </Td>
+                  </Tr>
+                  <Tr key="placeholder">
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Produk A
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      10
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      2023-03-08
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Log aktivitas untuk Produk A
+                    </Td>
+                  </Tr>
+                  <Tr key="placeholder">
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Produk A
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      10
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      2023-03-08
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Log aktivitas untuk Produk A
+                    </Td>
+                  </Tr>
+                  <Tr key="placeholder">
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Produk A
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      10
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      2023-03-08
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Log aktivitas untuk Produk A
+                    </Td>
+                  </Tr>
+                  <Tr key="placeholder">
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Produk A
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      10
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      2023-03-08
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Log aktivitas untuk Produk A
+                    </Td>
+                  </Tr>
                   <Tr key="placeholder">
                     <Td color='gray.400' borderColor={borderColor}>
                       Produk A
@@ -272,12 +358,12 @@ export default function Dashboard() {
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
                 Data Penyimpanan
               </Text>
-              <Button variant='primary' maxH='30px'>
+              <Button variant='dark' maxH='30px'>
                 SEE ALL
               </Button>
             </Flex>
-            <Box overflow={{ sm: "scroll", lg: "hidden" }}>
-              
+            <Box overflow={{ sm: "scroll", lg: "hidden" }} width="100%" height="250px"> {/* Adjust width and height as needed */}
+              <DonutChart chartData={chartData} chartOptions={chartOptions} />
             </Box>
           </Flex>
         </Card>
