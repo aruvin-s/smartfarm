@@ -105,6 +105,26 @@ export default function Dashboard() {
                   </Tr>
                 </Thead>
                 <Tbody>
+                <Tr key="placeholder">
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Produk A
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      10
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Segar
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      23 Desember 2024
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      23 Desember 2025
+                    </Td>
+                    <Td color='gray.400' borderColor={borderColor}>
+                      Edit
+                    </Td>
+                  </Tr>
                   <Tr key="placeholder">
                     <Td color='gray.400' borderColor={borderColor}>
                       Produk A
