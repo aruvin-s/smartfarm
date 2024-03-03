@@ -1,10 +1,10 @@
-import Dashboard from './pages/Dashboard'
+import ProductList from './pages/ProductList'
 
 function App() {
 
   return (
       <div>
-        <Dashboard />
+        <ProductList />
       </div>
   )
 }
