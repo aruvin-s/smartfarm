@@ -1,10 +1,10 @@
-import Inventory from './pages/Inventory'
+import Weather from './pages/Weather'
 
 function App() {
 
   return (
       <div>
-        <Inventory />
+        <Weather />
       </div>
   )
 }
