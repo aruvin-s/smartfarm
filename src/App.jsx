@@ -1,10 +1,10 @@
-import Setting from './pages/Setting'
+import Inventory from './pages/Inventory'
 
 function App() {
 
   return (
       <div>
-        <Setting />
+        <Inventory />
       </div>
   )
 }
