@@ -17,6 +17,7 @@ import {
     Tr,
     useColorMode,
     useColorModeValue,
+    Select
   } from "@chakra-ui/react";
 import {
     CartIcon,
@@ -27,7 +28,6 @@ import {
 import IconBox from "../components/Icons/IconBox.jsx";
 import Card from "../components/Card/Card.jsx";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
-import DonutChart from "../components/Chart/DonutChart.jsx";
 
 export default function Dashboard() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -36,21 +36,6 @@ export default function Dashboard() {
   const tableRowColor = useColorModeValue("#F7FAFC", "navy.900");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const textTableColor = useColorModeValue("gray.500", "white");
-
-  const chartData = [44, 55, 41, 17, 15];
-  const chartOptions = {
-    labels: ["Tomato", "Potato", "Carrot", "Cabbage", "Apple"],
-    legend: {
-      position: 'bottom',
-      horizontalAlign: 'center',
-      offsetY: 10, // Adjust as needed to vertically position the legend labels
-      itemMargin: {
-        vertical: 5 // Adjust as needed to increase or decrease spacing between legend items
-      }
-    }
-  };
-  
-  
 
   const { colorMode } = useColorMode();
 
@@ -212,9 +197,11 @@ export default function Dashboard() {
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
                 Ramalan Cuaca Bulanan
               </Text>
-              <Button variant='dark' maxH='30px'>
-                SEE ALL
-              </Button>
+              <Select placeholder='Pilih Lokasi' height='41px' width='186px' fontSize='14px' bg='white'>
+              <option value='option1'>Option 1</option>
+              <option value='option2'>Option 2</option>
+              <option value='option3'>Option 3</option>
+            </Select>
             </Flex>
             <Box overflow={{ sm: "scroll", lg: "hidden" }}>
             <Table>
