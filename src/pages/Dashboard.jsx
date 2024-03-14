@@ -55,9 +55,8 @@ export default function Dashboard() {
   const { colorMode } = useColorMode();
 
   return (
-    <Flex>
-      <Sidebar />
-      <Flex direction="column" ml={300} width="80%" height="100vh">
+    <Flex width="100%">
+      <Flex direction="column" ml={300} width="100%" height="100vh">
         <Flex>
           <SimpleGrid
               columns={{ sm: 1, md: 2, xl: 3 }}

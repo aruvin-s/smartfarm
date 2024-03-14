@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
 
-class Donut extends Component {
+class DonutChart extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,16 +12,25 @@ class Donut extends Component {
 
   render() {
     const { chartData, chartOptions } = this.props;
+    const labels = chartData.map((dataPoint) => dataPoint.name); // Extract labels from data
+
     return (
-      <Chart
-        options={chartOptions}
-        series={chartData}
-        type="donut"
-        width="100%"
-        height="100%"
-      />
+      <div>
+        <Chart
+          options={chartOptions}
+          series={chartData}
+          type="donut"
+          width="100%"
+          height="100%"
+        />
+        <ul style={{ display: "flex", flexDirection: "column" }}>
+          {labels.map((label, index) => (
+            <li key={index}>{label}</li>
+          ))}
+        </ul>
+      </div>
     );
   }
 }
 
-export default Donut;
+export default DonutChart;

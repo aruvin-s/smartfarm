@@ -1,10 +1,10 @@
-import Weather from './pages/Weather'
+import Admin from './layouts/Admin'
 
 function App() {
 
   return (
       <div>
-        <Weather />
+        <Admin />
       </div>
   )
 }
