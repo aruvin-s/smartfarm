@@ -60,7 +60,7 @@ export default function Dashboard() {
   const { colorMode } = useColorMode();
 
   return (
-    <Flex bg='green.500'>
+    <Flex width="100%">
       <Sidebar />
       <Flex direction="column" ml={300} width="80%" height="100vh">
         <Flex width="100%" height="100%" justifyContent="space-between" mt={5}>

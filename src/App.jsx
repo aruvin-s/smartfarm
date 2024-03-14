@@ -1,4 +1,5 @@
 import Admin from './layouts/Admin'
+import 'react-material-symbols/rounded';
 
 function App() {
 

@@ -5,8 +5,8 @@ import {
     Flex,
   } from "@chakra-ui/react";
 import routes from "../routes.js";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
-import Dashboard from "../pages/Dashboard.jsx";
+import Sidebar from "../components/Sidebar/SidebarAlt.jsx";
+import AddProduct from "../pages/AddProduct.jsx";
 
 const Admin = () => {
 
@@ -22,9 +22,9 @@ const Admin = () => {
           top='0'
           align="center"
         />
-        <Sidebar />
+        <Sidebar/>
         <Flex my="16px" me="16px">
-          <Dashboard />
+          <AddProduct />
         </Flex>
       </Box>
     </Flex>

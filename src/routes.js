@@ -15,6 +15,12 @@ var dashRoutes = [
       name: "Dashboard",
       component: Dashboard,
       layout: "/admin",
+    },
+    {
+      path: "/inventory",
+      name: "Inventory",
+      component: Dashboard,
+      layout: "/admin",
     }];
 
     export default dashRoutes;
