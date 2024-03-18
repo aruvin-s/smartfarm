@@ -61,10 +61,9 @@ export default function Dashboard() {
   const { colorMode } = useColorMode();
 
   return (
-    <Flex bg='green.500'>
-      <Sidebar />
-      <Flex direction="column" ml={300} width="80%" height="100vh">
-        <Flex width="100%" height="100%" justifyContent="space-between" mt={5}>
+    <Flex width="100%">
+      <Flex direction="column" ml={300} width="100%">
+        <Flex width="100%" height="100%" justifyContent="space-between">
         <Card p='0px' maxW={{ sm: "320px", md: "95%", lg: "95%" }} maxH={{ md: "95%", lg: "95%" }} borderRadius="md" bg="white">
           <Flex direction='column'>
             <Flex direction="column" justify='space-between' p='22px'>

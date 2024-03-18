@@ -54,7 +54,6 @@ export default function Dashboard() {
 
   return (
     <Flex>
-      <Sidebar />
       <Flex direction="column" ml={300} width="80%" height="100vh">
         <Flex>
           <SimpleGrid

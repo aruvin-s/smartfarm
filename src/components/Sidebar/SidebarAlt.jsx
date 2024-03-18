@@ -35,7 +35,7 @@ import { HSeparator } from "../Separator/Separator";
 import { SidebarHelp } from "./SidebarHelp";
 import React, { useState } from "react";
 import { Scrollbars } from "react-custom-scrollbars";
-import { NavLink, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import sidebarLogo from "../../assets/logoSidebar.png";
 
 const SidebarAlt = () => {
@@ -106,6 +106,7 @@ const SidebarAlt = () => {
           <Box>{brand}</Box>
           <Stack direction="column" mb="40px">
           <Box>
+          <Link to="/">
               <Button
                   boxSize="initial"
                   justifyContent="flex-start"
@@ -130,86 +131,94 @@ const SidebarAlt = () => {
                     </Text>
                   </Flex>
                 </Button>
+              </Link>
             </Box>
             <Box>
-              <Button
-                  boxSize="initial"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  bg="transparent"
-                  mb={{ xl: "6px" }}
-                  mx={{ xl: "auto" }}
-                  py="12px"
-                  ps={{ sm: "10px", xl: "16px" }}
-                  borderRadius="15px"
-                  _hover="none"
-                  w="100%"
-                  _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
-                  _focus={{ boxShadow: "none" }}
-                >
-                  <Flex>
-                      <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
-                      <MaterialSymbol icon="nutrition" size={20} fill  color='white' />
-                      </IconBox>
-                    <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
-                      Produk
-                    </Text>
-                  </Flex>
-                </Button>
+              <Link to="/product-list">
+                <Button
+                    boxSize="initial"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    bg="transparent"
+                    mb={{ xl: "6px" }}
+                    mx={{ xl: "auto" }}
+                    py="12px"
+                    ps={{ sm: "10px", xl: "16px" }}
+                    borderRadius="15px"
+                    _hover="none"
+                    w="100%"
+                    _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+                    _focus={{ boxShadow: "none" }}
+                  >
+                    <Flex>
+                        <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
+                        <MaterialSymbol icon="nutrition" size={20} fill  color='white' />
+                        </IconBox>
+                      <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
+                        Produk
+                      </Text>
+                    </Flex>
+                  </Button>
+              </Link>
             </Box>
             <Box>
-              <Button
-                  boxSize="initial"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  bg="transparent"
-                  mb={{ xl: "6px" }}
-                  mx={{ xl: "auto" }}
-                  py="12px"
-                  ps={{ sm: "10px", xl: "16px" }}
-                  borderRadius="15px"
-                  _hover="none"
-                  w="100%"
-                  _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
-                  _focus={{ boxShadow: "none" }}
-                >
-                  <Flex>
-                      <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
-                      <MaterialSymbol icon="settings" size={20} fill  color='white' />
-                      </IconBox>
-                    <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
-                      Pengaturan
-                    </Text>
-                  </Flex>
-                </Button>
+            <Link to="/setting">
+                <Button
+                    boxSize="initial"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    bg="transparent"
+                    mb={{ xl: "6px" }}
+                    mx={{ xl: "auto" }}
+                    py="12px"
+                    ps={{ sm: "10px", xl: "16px" }}
+                    borderRadius="15px"
+                    _hover="none"
+                    w="100%"
+                    _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+                    _focus={{ boxShadow: "none" }}
+                  >
+                    <Flex>
+                        <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
+                        <MaterialSymbol icon="settings" size={20} fill  color='white' />
+                        </IconBox>
+                      <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
+                        Pengaturan
+                      </Text>
+                    </Flex>
+                  </Button>
+              </Link>
+            </Box>
+            <Box >
+              <Link to="/inventory">
+                <Button
+                    boxSize="initial"
+                    justifyContent="flex-start"
+                    alignItems="center"
+                    bg="transparent"
+                    mb={{ xl: "6px" }}
+                    mx={{ xl: "auto" }}
+                    py="12px"
+                    ps={{ sm: "10px", xl: "16px" }}
+                    borderRadius="15px"
+                    _hover="none"
+                    w="100%"
+                    _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
+                    _focus={{ boxShadow: "none" }}
+                  >
+                    <Flex>
+                        <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
+                        <MaterialSymbol icon="inventory_2" size={20} fill  color='white' />
+                        </IconBox>
+                      <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
+                        Penyimpanan
+                      </Text>
+                    </Flex>
+                  </Button>
+              </Link>
             </Box>
             <Box>
-              <Button
-                  boxSize="initial"
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  bg="transparent"
-                  mb={{ xl: "6px" }}
-                  mx={{ xl: "auto" }}
-                  py="12px"
-                  ps={{ sm: "10px", xl: "16px" }}
-                  borderRadius="15px"
-                  _hover="none"
-                  w="100%"
-                  _active={{ bg: "inherit", transform: "none", borderColor: "transparent" }}
-                  _focus={{ boxShadow: "none" }}
-                >
-                  <Flex>
-                      <IconBox bg="green.500" color="white" h="30px" w="30px" me="12px">
-                      <MaterialSymbol icon="inventory_2" size={20} fill  color='white' />
-                      </IconBox>
-                    <Text color={useColorModeValue("gray.400", "white")} my="auto" fontSize="sm">
-                      Penyimpanan
-                    </Text>
-                  </Flex>
-                </Button>
-            </Box>
-            <Box>
+            <Link to="/weather">
               <Button
                   boxSize="initial"
                   justifyContent="flex-start"
@@ -234,6 +243,7 @@ const SidebarAlt = () => {
                     </Text>
                   </Flex>
                 </Button>
+            </Link>
             </Box>
           </Stack>
           <Box width="100%" textAlign="center"> {/* Container for the button */}

@@ -17,6 +17,7 @@ import {
     Tr,
     useColorMode,
     useColorModeValue,
+    Tag
   } from "@chakra-ui/react";
 import {
     CartIcon,
@@ -28,6 +29,8 @@ import IconBox from "../components/Icons/IconBox.jsx";
 import Card from "../components/Card/Card.jsx";
 import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import DonutChart from "../components/Chart/DonutChart.jsx";
+import supabase from '../supabaseClient.js';
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -37,9 +40,9 @@ export default function Dashboard() {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const textTableColor = useColorModeValue("gray.500", "white");
 
-  const chartData = [44, 55, 41, 17, 15];
+  const [chartData, setChartData] = useState([]);
+  const [chartLabels, setChartLabels] = useState([])
   const chartOptions = {
-    labels: ["Tomato", "Potato", "Carrot", "Cabbage", "Apple"],
     legend: {
       position: 'bottom',
       horizontalAlign: 'center',
@@ -49,303 +52,265 @@ export default function Dashboard() {
       }
     }
   };
+
+  const [products, setProducts] = useState([]);
+  const [productStats, setProductStats] = useState([]);
   
+  useEffect(() => {
+    getProducts();
+    getProductStats();
+  }, []);
+
+  async function getProducts() {
+    try {
+      const { data, error } = await supabase.from("farmproduct").select();
+      if (error) {
+        throw error;
+      }
+  
+      // Process data to format it for the chart
+      const formattedData = data.map(product => ({
+        label: product.product_name, // Assuming each product object has a 'name' property
+        value: product.product_weight // Assuming each product object has a 'quantity' property
+      }));
+  
+      // Extract labels from the data
+      const labels = formattedData.map(product => product.label);
+  
+      setProducts(data);
+      setChartData(formattedData);
+      setChartLabels(labels);
+    } catch (error) {
+      console.error("Error fetching products:", error.message);
+      console.log(chartData);
+      console.log(chartLabels);
+    }
+  }
+
+  async function getProductStats() {
+    const { data } = await supabase.from("productstats").select();
+    setProductStats(data);
+  }
   
 
   const { colorMode } = useColorMode();
 
   return (
     <Flex width="100%">
-      <Flex direction="column" ml={300} width="100%" height="100vh">
+      <Flex direction="column" ml={300} width="100%">
         <Flex>
-          <SimpleGrid
-              columns={{ sm: 1, md: 2, xl: 3 }}
-              spacing="24px"
-              mb="20px"
-              width="100%"
-            >
-              <Card minH="125px">
-                <Flex direction="column">
-                  <Flex
-                    flexDirection="row"
-                    align="center"
-                    justify="center"
-                    w="100%"
-                    mb="25px"
-                  >
-                    <Stat me="auto">
-                      <StatLabel
-                        fontSize="xs"
-                        color="gray.400"
-                        fontWeight="bold"
-                        textTransform="uppercase"
-                      >
-                        TOTAL JUMLAH PRODUK
-                      </StatLabel>
-                      <Flex>
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          250 items
-                        </StatNumber>
-                      </Flex>
-                    </Stat>
-                    <IconBox
-                      borderRadius="50%"
-                      as="box"
-                      h={"45px"}
-                      w={"45px"}
-                      bg={iconBlue}
+        {productStats.length > 0 ? (
+                productStats.map((stat) => (
+                  <SimpleGrid
+                      columns={{ sm: 1, md: 2, xl: 3 }}
+                      spacing="24px"
+                      mb="20px"
+                      width="100%"
                     >
-                      <WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />
-                    </IconBox>
-                  </Flex>
-                  <Text color="gray.400" fontSize="sm">
-                    <Text as="span" color="green.400" fontWeight="bold">
-                      +3.48%{" "}
-                    </Text>
-                    Sejak bulan lalu
-                  </Text>
-                </Flex>
-              </Card>
-              <Card minH="125px">
-                <Flex direction="column">
-                  <Flex
-                    flexDirection="row"
-                    align="center"
-                    justify="center"
-                    w="100%"
-                    mb="25px"
-                  >
-                    <Stat me="auto">
-                      <StatLabel
-                        fontSize="xs"
-                        color="gray.400"
-                        fontWeight="bold"
-                        textTransform="uppercase"
-                      >
-                        PRODUK KADALUWARSA
-                      </StatLabel>
-                      <Flex>
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          250 items
-                        </StatNumber>
-                      </Flex>
-                    </Stat>
-                    <IconBox
-                      borderRadius="50%"
-                      as="box"
-                      h={"45px"}
-                      w={"45px"}
-                      bg="#E53E3E"
-                    >
-                      <GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />
-                    </IconBox>
-                  </Flex>
-                  <Text color="gray.400" fontSize="sm">
-                    <Text as="span" color="green.400" fontWeight="bold">
-                      +5.2%{" "}
-                    </Text>
-                    Sejak bulan lalu
-                  </Text>
-                </Flex>
-              </Card>
-              <Card minH="125px">
-                <Flex direction="column">
-                  <Flex
-                    flexDirection="row"
-                    align="center"
-                    justify="center"
-                    w="100%"
-                    mb="25px"
-                  >
-                    <Stat me="auto">
-                      <StatLabel
-                        fontSize="xs"
-                        color="gray.400"
-                        fontWeight="bold"
-                        textTransform="uppercase"
-                      >
-                        PRODUK STOK RENDAH
-                      </StatLabel>
-                      <Flex>
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          25 items
-                        </StatNumber>
-                      </Flex>
-                    </Stat>
-                    <IconBox
-                      borderRadius="50%"
-                      as="box"
-                      h={"45px"}
-                      w={"45px"}
-                      bg="#DD6B20"
-                    >
-                      <DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />
-                    </IconBox>
-                  </Flex>
-                  <Text color="gray.400" fontSize="sm">
-                    <Text as="span" color="red.500" fontWeight="bold">
-                      -2.82%{" "}
-                    </Text>
-                    Sejak bulan lalu
-                  </Text>
-                </Flex>
-              </Card>
-          </SimpleGrid>
+                      <Card minH="125px">
+                        <Flex direction="column">
+                          <Flex
+                            flexDirection="row"
+                            align="center"
+                            justify="center"
+                            w="100%"
+                            mb="25px"
+                          >
+                            <Stat me="auto">
+                              <StatLabel
+                                fontSize="xs"
+                                color="gray.500"
+                                fontWeight="bold"
+                                textTransform="uppercase"
+                              >
+                                TOTAL JUMLAH PRODUK
+                              </StatLabel>
+                              <Flex>
+                                <StatNumber
+                                  fontSize="lg"
+                                  color={textColor}
+                                  fontWeight="bold"
+                                >
+                                  <Text> {stat.total_products} items</Text>
+                                </StatNumber>
+                              </Flex>
+                            </Stat>
+                            <IconBox
+                              borderRadius="50%"
+                              as="box"
+                              h={"45px"}
+                              w={"45px"}
+                              bg={iconBlue}
+                            >
+                              <WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                            </IconBox>
+                          </Flex>
+                          <Text color="gray.500" fontSize="sm">
+                            <Text as="span" color="green.500" fontWeight="bold">
+                              +3.48%{" "}
+                            </Text>
+                            Sejak bulan lalu
+                          </Text>
+                        </Flex>
+                      </Card>
+                      <Card minH="125px">
+                        <Flex direction="column">
+                          <Flex
+                            flexDirection="row"
+                            align="center"
+                            justify="center"
+                            w="100%"
+                            mb="25px"
+                          >
+                            <Stat me="auto">
+                              <StatLabel
+                                fontSize="xs"
+                                color="gray.500"
+                                fontWeight="bold"
+                                textTransform="uppercase"
+                              >
+                                PRODUK KADALUWARSA
+                              </StatLabel>
+                              <Flex>
+                                <StatNumber
+                                  fontSize="lg"
+                                  color={textColor}
+                                  fontWeight="bold"
+                                >
+                                  <Text> {stat.total_exp} items</Text>
+                                </StatNumber>
+                              </Flex>
+                            </Stat>
+                            <IconBox
+                              borderRadius="50%"
+                              as="box"
+                              h={"45px"}
+                              w={"45px"}
+                              bg="#E53E3E"
+                            >
+                              <GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                            </IconBox>
+                          </Flex>
+                          <Text color="gray.500" fontSize="sm">
+                            <Text as="span" color="green.500" fontWeight="bold">
+                              +5.2%{" "}
+                            </Text>
+                            Sejak bulan lalu
+                          </Text>
+                        </Flex>
+                      </Card>
+                      <Card minH="125px">
+                        <Flex direction="column">
+                          <Flex
+                            flexDirection="row"
+                            align="center"
+                            justify="center"
+                            w="100%"
+                            mb="25px"
+                          >
+                            <Stat me="auto">
+                              <StatLabel
+                                fontSize="xs"
+                                color="gray.500"
+                                fontWeight="bold"
+                                textTransform="uppercase"
+                              >
+                                PRODUK STOK RENDAH
+                              </StatLabel>
+                              <Flex>
+                                <StatNumber
+                                  fontSize="lg"
+                                  color={textColor}
+                                  fontWeight="bold"
+                                >
+                                  <Text> {stat.total_low} items</Text>
+                                </StatNumber>
+                              </Flex>
+                            </Stat>
+                            <IconBox
+                              borderRadius="50%"
+                              as="box"
+                              h={"45px"}
+                              w={"45px"}
+                              bg="#DD6B20"
+                            >
+                              <DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                            </IconBox>
+                          </Flex>
+                          <Text color="gray.500" fontSize="sm">
+                            <Text as="span" color="red.500" fontWeight="bold">
+                              -2.82%{" "}
+                            </Text>
+                            Sejak bulan lalu
+                          </Text>
+                        </Flex>
+                      </Card>
+                    </SimpleGrid>
+                ))
+              ) : (
+                <Text>Loading...</Text>
+              )}
         </Flex>
         <Flex width="100%" justifyContent="space-between">
-        <Card p='0px' maxW={{ sm: "320px", md: "70%", lg: "70%" }} >
+        <Card p='0px' maxW={{ sm: "320px", md: "70%", lg: "70%" }} height="555px">
           <Flex direction='column'>
             <Flex align='center' justify='space-between' p='22px'>
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
                 Log Aktivitas
               </Text>
-              <Button variant='dark' maxH='30px'>
-                SEE ALL
-              </Button>
             </Flex>
             <Box overflow={{ sm: "scroll", lg: "hidden" }}>
-            <Table>
+            <Table size="md">
                 <Thead>
                   <Tr bg={tableRowColor}>
-                    <Th color='gray.400' borderColor={borderColor}>
+                    <Th color='gray.500' borderColor={borderColor}>
                       Nama Produk
                     </Th>
-                    <Th color='gray.400' borderColor={borderColor}>
+                    <Th color='gray.500' borderColor={borderColor}>
                       Jumlah Produk
                     </Th>
-                    <Th color='gray.400' borderColor={borderColor}>
-                      Tanggal Penanaman
+                    <Th color='gray.500' borderColor={borderColor}>
+                      Tanggal Panen
                     </Th>
-                    <Th color='gray.400' borderColor={borderColor}>
+                    <Th color='gray.500' borderColor={borderColor}>
                       Logs
                     </Th>
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
+                {products.length > 0 ? (
+                  products.slice(-7).reverse().map((product) => (
+                      <Tr key="id">
+                    <Td color='gray.500' borderColor={borderColor}>
+                      {product.product_name}
                     </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
+                    <Td color='gray.500' borderColor={borderColor}>
+                      {product.product_weight}
                     </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
+                    <Td color='gray.500' borderColor={borderColor}>
+                      {product.harvest_date}
                     </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
+                    <Td color='gray.500' borderColor={borderColor}>
+                    <Tag
+                      bg={
+                        product.product_logs === "Ditambahkan"
+                          ? "#38A169"
+                          : product.product_logs === "Expired"
+                          ? "#E53E3E"
+                          : "#DD6B20"
+                      }
+                      color="white"
+                      fontWeight='semibold'
+                      p="6px"
+                    >
+                      {product.product_logs}
+                    </Tag>
                     </Td>
                   </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk B
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      20
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk B
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk C
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      30
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-12
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk C
-                    </Td>
-                  </Tr>
+                    ))
+                  ) : (
+                    <Text>Loading...</Text>
+                  )}
                 </Tbody>
               </Table>
             </Box>

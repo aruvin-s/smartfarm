@@ -31,7 +31,6 @@ import {
   } from "../components/Icons/Icons.jsx";
 import IconBox from "../components/Icons/IconBox.jsx";
 import Card from "../components/Card/Card.jsx";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import { SearchBar }from "../components/SearchBar/SearchBar.jsx";
 
 export default function Dashboard() {
@@ -61,9 +60,8 @@ export default function Dashboard() {
 
   return (
     <Flex width="100%">
-      <Sidebar />
-      <Flex direction="column" ml={300} width="80%" height="100vh">
-        <Flex width="100%" height="100%" justifyContent="space-between" mt={5}>
+      <Flex direction="column" ml={300} width="100%">
+        <Flex width="100%" height="100%" justifyContent="space-between">
         <Card p='0px' maxW={{ sm: "320px", md: "95%", lg: "95%" }} maxH={{ md: "95%", lg: "95%" }} borderRadius="md" bg="white">
           <Flex direction='column'>
             <Flex align='center' justify='space-between' p='22px'>
