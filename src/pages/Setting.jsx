@@ -61,10 +61,10 @@ export default function Dashboard() {
   const { colorMode } = useColorMode();
 
   return (
-    <Flex width="100%">
-      <Flex direction="column" ml={300} width="100%">
+    <Flex width="100%" height="100%">
+      <Flex direction="column" ml={300} width="100%" height="95vh">
         <Flex width="100%" height="100%" justifyContent="space-between">
-        <Card p='0px' maxW={{ sm: "320px", md: "95%", lg: "95%" }} maxH={{ md: "95%", lg: "95%" }} borderRadius="md" bg="white">
+        <Card p='0px' maxW={{ sm: "320px", md: "95%", lg: "95%" }}  borderRadius="20px" bg="white">
           <Flex direction='column'>
             <Flex direction="column" justify='space-between' p='22px'>
             <Avatar size='2xl' my={4} name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />

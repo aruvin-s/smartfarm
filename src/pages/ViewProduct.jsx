@@ -14,63 +14,60 @@ import {
 import Card from "../components/Card/Card.jsx";
 import React, { useState, useEffect } from "react";
 import supabase from '../supabaseClient.js';
+import { useParams } from "react-router-dom";
 
-export default function AddProduct() {
+export default function ViewProduct() {
+  const [loading, setLoading] = useState(true);
   const [productName, setProductName] = useState('');
   const [productCategory, setProductCategory] = useState('');
   const [productWeight, setProductWeight] = useState('');
   const [harvestDate, setHarvestDate] = useState('');
   const [expDate, setExpDate] = useState('');
-  const [productImage, setProductImage] = useState([]);
+  const [productImage, setProductImage] = useState('');
   const [productDetails, setProductDetails] = useState('');
 
-  async function uploadImage(e) {
-    const file = e.target.files[0];
-  
-    if (!file) return; // Handle case where no file is selected
-  
-    const { data, error } = await supabase.storage.from('images').upload(file);
-  
-    if (error) {
-      console.error('Error uploading image:', error.message);
-    } else {
-      console.log('Image uploaded successfully:', data);
-  
-      // Assuming data.path contains the URL of the uploaded image
-      setProductImage(data.path); // Update the state with the image URL
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      getProducts(id);
     }
+  }, [id]);
+
+  async function getProducts(id) {
+  try {
+    const { data, error } = await supabase
+      .from("farmproducts")
+      .select("*")
+      .eq("id", id)
+      .single();
+    
+    if (error) {
+      throw error;
+    }
+    
+    if (data) {
+      setProductName(data.product_name);
+      setProductCategory(data.product_category);
+      setProductWeight(data.product_weight);
+      setHarvestDate(data.harvest_date);
+      setExpDate(data.exp_date);
+      setProductDetails(data.product_desc);
+      setLoading(false); // Data fetching is complete
+      console.log(data);
+    } else {
+      console.log("No data found for id:", id);
+    }
+  } catch (error) {
+    console.error("Error fetching product:", error.message);
+    setLoading(false); // Set loading to false in case of error
   }
-  
+}
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { data, error } = await supabase.from('farmproducts').insert([
-        {
-            product_name: productName,
-            product_category: productCategory,
-            product_weight: productWeight,
-            harvest_date: harvestDate,
-            exp_date: expDate,
-            product_image: productImage,
-            product_desc: productDetails
-        }
-    ]);
 
-    if (error) {
-        console.error('Error adding product:', error.message);
-    } else {
-        console.log('Product added successfully:', data);
-        // Reset form fields after successful submission
-        setProductName('');
-        setProductCategory('');
-        setProductWeight('');
-        setHarvestDate('');
-        setExpDate('');
-        setProductImage('');
-        setProductDetails('');
-    }
-};
-
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Flex width="100%" height="100%">
@@ -79,7 +76,7 @@ export default function AddProduct() {
         <Card p='0px' borderRadius="20px" bg="white">
           <Flex direction='column'>
             <Flex align='center' justify='space-between' p='22px' >
-            <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+            <form style={{ width: '100%' }}>
               <FormControl>
                   <SimpleGrid columns={2} spacing={2}>
                       <Box>
@@ -87,6 +84,7 @@ export default function AddProduct() {
                           Nama Produk
                           </FormLabel>
                           <Input
+                          isReadOnly="true"
                           value={productName}
                           onChange={(e) => setProductName(e.target.value)}
                           fontSize="sm"
@@ -101,7 +99,7 @@ export default function AddProduct() {
                           <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
                               Kategori
                           </FormLabel>
-                          <Select placeholder='Pilih Kategori Produk' fontSize='14px' bg='white' size="lg" ms="4px"
+                          <Select isReadOnly="true" placeholder='Pilih Kategori Produk' fontSize='14px' bg='white' size="lg" ms="4px"
                           value={productCategory}
                           onChange={(e) => setProductCategory(e.target.value)}
                           >
@@ -114,6 +112,7 @@ export default function AddProduct() {
                           Tanggal Panen
                           </FormLabel>
                           <Input
+                          isReadOnly="true"
                           value={harvestDate}
                           onChange={(e) => setHarvestDate(e.target.value)}
                           fontSize="sm"
@@ -129,6 +128,7 @@ export default function AddProduct() {
                           Tanggal Kadaluwarsa
                           </FormLabel>
                           <Input
+                          isReadOnly="true"
                           value={expDate}
                           onChange={(e) => setExpDate(e.target.value)}
                           fontSize="sm"
@@ -145,6 +145,7 @@ export default function AddProduct() {
                           </FormLabel>
                           <InputGroup size="lg">
                             <Input
+                            isReadOnly="true"
                             value={productWeight}
                             onChange={(e) => setProductWeight(e.target.value)}
                             fontSize="sm"
@@ -163,7 +164,6 @@ export default function AddProduct() {
                                   Gambar Produk
                           </FormLabel>
                             <Input
-                            onChange={(e) => uploadImage(e)}
                             height="100%"
                             fontSize="sm"
                             type="file"
@@ -175,6 +175,7 @@ export default function AddProduct() {
                               Detail Produk
                               </FormLabel>
                               <Textarea
+                              isReadOnly="true"
                               value={productDetails}
                               onChange={(e) => setProductDetails(e.target.value)}
                               height="100%"
@@ -184,7 +185,6 @@ export default function AddProduct() {
                   </Flex>
                   <SimpleGrid columns={2} spacing={2} width="50%">
                       <Button
-                      type="submit"
                       fontSize="10px"
                       bgColor="green.500"
                       color="white"
@@ -193,17 +193,7 @@ export default function AddProduct() {
                       h="45"
                       mb="24px"
                       >
-                      Tambah Produk
-                      </Button>
-                      <Button
-                      fontSize="10px"
-                      variant="dark"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mb="24px"
-                      >
-                      Batal
+                      Edit Produk
                       </Button>
                   </SimpleGrid>
               </FormControl>

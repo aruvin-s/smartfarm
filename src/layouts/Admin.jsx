@@ -8,7 +8,7 @@ const Admin = ({children}) => {
 
   return (
     <Flex bg="#F7FAC">
-      <Box width="100%" >
+      <Box width="100%" height="100%">
         <Box
           minH='40vh'
           w='100%'

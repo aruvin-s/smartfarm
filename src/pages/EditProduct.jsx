@@ -12,7 +12,7 @@ import {
     InputRightAddon
   } from "@chakra-ui/react";
 import Card from "../components/Card/Card.jsx";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import supabase from '../supabaseClient.js';
 
 export default function AddProduct() {
@@ -21,28 +21,10 @@ export default function AddProduct() {
   const [productWeight, setProductWeight] = useState('');
   const [harvestDate, setHarvestDate] = useState('');
   const [expDate, setExpDate] = useState('');
-  const [productImage, setProductImage] = useState([]);
+  const [productImage, setProductImage] = useState('');
   const [productDetails, setProductDetails] = useState('');
 
-  async function uploadImage(e) {
-    const file = e.target.files[0];
-  
-    if (!file) return; // Handle case where no file is selected
-  
-    const { data, error } = await supabase.storage.from('images').upload(file);
-  
-    if (error) {
-      console.error('Error uploading image:', error.message);
-    } else {
-      console.log('Image uploaded successfully:', data);
-  
-      // Assuming data.path contains the URL of the uploaded image
-      setProductImage(data.path); // Update the state with the image URL
-    }
-  }
-  
-
-  const handleSubmit = async (e) => {
+  const handleUpdate = async (id) => {
     e.preventDefault();
     const { data, error } = await supabase.from('farmproducts').insert([
         {
@@ -51,7 +33,7 @@ export default function AddProduct() {
             product_weight: productWeight,
             harvest_date: harvestDate,
             exp_date: expDate,
-            product_image: productImage,
+            product_image: null,
             product_desc: productDetails
         }
     ]);
@@ -71,7 +53,6 @@ export default function AddProduct() {
     }
 };
 
-
   return (
     <Flex width="100%" height="100%">
       <Flex direction="column" ml={300} width="100%">
@@ -79,7 +60,7 @@ export default function AddProduct() {
         <Card p='0px' borderRadius="20px" bg="white">
           <Flex direction='column'>
             <Flex align='center' justify='space-between' p='22px' >
-            <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+            <form onSubmit={handleUpdate} style={{ width: '100%' }}>
               <FormControl>
                   <SimpleGrid columns={2} spacing={2}>
                       <Box>
@@ -163,7 +144,6 @@ export default function AddProduct() {
                                   Gambar Produk
                           </FormLabel>
                             <Input
-                            onChange={(e) => uploadImage(e)}
                             height="100%"
                             fontSize="sm"
                             type="file"

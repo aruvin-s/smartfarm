@@ -63,7 +63,7 @@ export default function Dashboard() {
 
   async function getProducts() {
     try {
-      const { data, error } = await supabase.from("farmproduct").select();
+      const { data, error } = await supabase.from("farmproducts").select();
       if (error) {
         throw error;
       }
