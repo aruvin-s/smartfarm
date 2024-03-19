@@ -12,10 +12,13 @@ import {
     InputRightAddon
   } from "@chakra-ui/react";
 import Card from "../components/Card/Card.jsx";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import supabase from '../supabaseClient.js';
+import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function AddProduct() {
+  const [loading, setLoading] = useState(true);
   const [productName, setProductName] = useState('');
   const [productCategory, setProductCategory] = useState('');
   const [productWeight, setProductWeight] = useState('');
@@ -24,24 +27,32 @@ export default function AddProduct() {
   const [productImage, setProductImage] = useState('');
   const [productDetails, setProductDetails] = useState('');
 
-  const handleUpdate = async (id) => {
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (id) {
+      getProducts(id);
+    }
+  }, [id]);
+
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.from('farmproducts').insert([
-        {
+   const { data, error } = await supabase.from('farmproducts')
+        .update({
             product_name: productName,
             product_category: productCategory,
             product_weight: productWeight,
             harvest_date: harvestDate,
             exp_date: expDate,
-            product_image: null,
+            product_image: null, // You might want to handle image update separately
             product_desc: productDetails
-        }
-    ]);
+        })
+        .eq('id', id);
 
     if (error) {
-        console.error('Error adding product:', error.message);
+        console.error('Error updating product:', error.message);
     } else {
-        console.log('Product added successfully:', data);
+        console.log('Product updated successfully:', data);
         // Reset form fields after successful submission
         setProductName('');
         setProductCategory('');
@@ -50,8 +61,44 @@ export default function AddProduct() {
         setExpDate('');
         setProductImage('');
         setProductDetails('');
+        getProducts(id);
     }
 };
+
+  async function getProducts(id) {
+  try {
+    const { data, error } = await supabase
+      .from("farmproducts")
+      .select("*")
+      .eq("id", id)
+      .single();
+    
+    if (error) {
+      throw error;
+    }
+    
+    if (data) {
+      setProductName(data.product_name);
+      setProductCategory(data.product_category);
+      setProductWeight(data.product_weight);
+      setHarvestDate(data.harvest_date);
+      setExpDate(data.exp_date);
+      setProductDetails(data.product_desc);
+      setLoading(false); // Data fetching is complete
+      console.log(data);
+    } else {
+      console.log("No data found for id:", id);
+    }
+  } catch (error) {
+    console.error("Error fetching product:", error.message);
+    setLoading(false); // Set loading to false in case of error
+  }
+}
+
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Flex width="100%" height="100%">
@@ -173,18 +220,20 @@ export default function AddProduct() {
                       h="45"
                       mb="24px"
                       >
-                      Tambah Produk
+                      Ubah Produk
                       </Button>
-                      <Button
-                      fontSize="10px"
-                      variant="dark"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mb="24px"
-                      >
-                      Batal
-                      </Button>
+                      <Link to="/product-list">
+                        <Button
+                        fontSize="10px"
+                        variant="dark"
+                        fontWeight="bold"
+                        w="100%"
+                        h="45"
+                        mb="24px"
+                        >
+                        Batal
+                        </Button>
+                      </Link>
                   </SimpleGrid>
               </FormControl>
             </form>

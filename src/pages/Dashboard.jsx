@@ -31,6 +31,7 @@ import Sidebar from "../components/Sidebar/Sidebar.jsx";
 import DonutChart from "../components/Chart/DonutChart.jsx";
 import supabase from '../supabaseClient.js';
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -39,13 +40,20 @@ export default function Dashboard() {
   const tableRowColor = useColorModeValue("#F7FAFC", "navy.900");
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const textTableColor = useColorModeValue("gray.500", "white");
-
+  const [products, setProducts] = useState([]);
+  const [productStats, setProductStats] = useState([]);
   const [chartData, setChartData] = useState([]);
-  const [chartLabels, setChartLabels] = useState([])
+  const [chartLabels, setChartLabels] = useState([]);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [expiredProductsCount, setExpiredProductsCount] = useState(0);
+  const [lowProductsCount, setLowProductsCount] = useState(0);
+  
   const chartOptions = {
+    labels: chartLabels,
     legend: {
       position: 'bottom',
       horizontalAlign: 'center',
+      fontSize: '14px',
       offsetY: 10, // Adjust as needed to vertically position the legend labels
       itemMargin: {
         vertical: 5 // Adjust as needed to increase or decrease spacing between legend items
@@ -53,12 +61,8 @@ export default function Dashboard() {
     }
   };
 
-  const [products, setProducts] = useState([]);
-  const [productStats, setProductStats] = useState([]);
-  
   useEffect(() => {
     getProducts();
-    getProductStats();
   }, []);
 
   async function getProducts() {
@@ -68,30 +72,19 @@ export default function Dashboard() {
         throw error;
       }
   
-      // Process data to format it for the chart
-      const formattedData = data.map(product => ({
-        label: product.product_name, // Assuming each product object has a 'name' property
-        value: product.product_weight // Assuming each product object has a 'quantity' property
-      }));
-  
-      // Extract labels from the data
-      const labels = formattedData.map(product => product.label);
-  
       setProducts(data);
-      setChartData(formattedData);
-      setChartLabels(labels);
+      setTotalProducts(data.length);
+      setExpiredProductsCount(data.filter(product => product.product_logs === "Kadaluwarsa").length);
+      setLowProductsCount(data.filter(product => product.product_logs === "Stok Rendah").length);
+
+      const newData = data.map(product => parseFloat(product.product_weight));
+      const newLabels = data.map(product => product.product_name);
+      setChartData(newData);
+      setChartLabels(newLabels);
     } catch (error) {
       console.error("Error fetching products:", error.message);
-      console.log(chartData);
-      console.log(chartLabels);
     }
   }
-
-  async function getProductStats() {
-    const { data } = await supabase.from("productstats").select();
-    setProductStats(data);
-  }
-  
 
   const { colorMode } = useColorMode();
 
@@ -99,9 +92,7 @@ export default function Dashboard() {
     <Flex width="100%">
       <Flex direction="column" ml={300} width="100%">
         <Flex>
-        {productStats.length > 0 ? (
-                productStats.map((stat) => (
-                  <SimpleGrid
+            <SimpleGrid
                       columns={{ sm: 1, md: 2, xl: 3 }}
                       spacing="24px"
                       mb="20px"
@@ -131,7 +122,7 @@ export default function Dashboard() {
                                   color={textColor}
                                   fontWeight="bold"
                                 >
-                                  <Text> {stat.total_products} items</Text>
+                                  <Text>{totalProducts} items</Text>
                                 </StatNumber>
                               </Flex>
                             </Stat>
@@ -177,7 +168,7 @@ export default function Dashboard() {
                                   color={textColor}
                                   fontWeight="bold"
                                 >
-                                  <Text> {stat.total_exp} items</Text>
+                                  <Text> {expiredProductsCount} items</Text>
                                 </StatNumber>
                               </Flex>
                             </Stat>
@@ -223,7 +214,7 @@ export default function Dashboard() {
                                   color={textColor}
                                   fontWeight="bold"
                                 >
-                                  <Text> {stat.total_low} items</Text>
+                                  <Text> {lowProductsCount} items</Text>
                                 </StatNumber>
                               </Flex>
                             </Stat>
@@ -245,14 +236,10 @@ export default function Dashboard() {
                           </Text>
                         </Flex>
                       </Card>
-                    </SimpleGrid>
-                ))
-              ) : (
-                <Text>Loading...</Text>
-              )}
+            </SimpleGrid>
         </Flex>
-        <Flex width="100%" justifyContent="space-between">
-        <Card p='0px' maxW={{ sm: "320px", md: "70%", lg: "70%" }} height="555px">
+        <Flex width="100%" height="73%" justifyContent="space-between">
+        <Card p='0px' maxW={{ sm: "320px", md: "70%", lg: "70%" }}>
           <Flex direction='column'>
             <Flex align='center' justify='space-between' p='22px'>
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
@@ -282,7 +269,9 @@ export default function Dashboard() {
                   products.slice(-7).reverse().map((product) => (
                       <Tr key="id">
                     <Td color='gray.500' borderColor={borderColor}>
+                      <Link to={`/view-product/${product.id}`}>
                       {product.product_name}
+                      </Link>
                     </Td>
                     <Td color='gray.500' borderColor={borderColor}>
                       {product.product_weight}
@@ -295,7 +284,7 @@ export default function Dashboard() {
                       bg={
                         product.product_logs === "Ditambahkan"
                           ? "#38A169"
-                          : product.product_logs === "Expired"
+                          : product.product_logs === "Kadaluwarsa"
                           ? "#E53E3E"
                           : "#DD6B20"
                       }
@@ -322,13 +311,16 @@ export default function Dashboard() {
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
                 Data Penyimpanan
               </Text>
-              <Button variant='dark' maxH='30px'>
-                SEE ALL
-              </Button>
+              <Link to="/product-list">
+                <Button variant='dark' maxH='30px'>
+                  SEE ALL
+                </Button>
+              </Link>
             </Flex>
-            <Box overflow={{ sm: "scroll", lg: "hidden" }} width="100%" height="250px"> {/* Adjust width and height as needed */}
-              <DonutChart chartData={chartData} chartOptions={chartOptions} />
-            </Box>
+            <Box overflow="hidden" width="100%" height="100%">
+                {/* Adjusted width and height */}
+                <DonutChart chartData={chartData} chartOptions={chartOptions} />
+              </Box>
           </Flex>
         </Card>
         </Flex>

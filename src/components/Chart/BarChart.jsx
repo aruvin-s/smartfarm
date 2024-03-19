@@ -28,7 +28,7 @@ class Bar extends Component {
       // If data.series contains a single series
       series = [
         {
-          name: data.seriesName || "Series 1",
+          name: data.seriesName,
           data: data.series
         }
       ];

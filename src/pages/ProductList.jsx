@@ -65,6 +65,7 @@ const handleDeleteProduct = async (id) => {
       console.error('Error delete product', error.message);
   } else {
       console.log('Product deleted', data);
+      getProducts();
   }
 };
 
@@ -121,7 +122,7 @@ return (
               </Thead>
               <Tbody>
               {products.length > 0 ? (
-                products.map((product) => (
+                products.reverse().map((product) => (
                   <Tr key="id">
                   <Td color='gray.500' borderColor={borderColor}>
                   <Link to={`/view-product/${product.id}`}>
@@ -142,14 +143,15 @@ return (
                   </Td>
                   <Td color='gray.500' borderColor={borderColor}>
                   <Flex>
+                  <Link to={`/edit-product/${product.id}`}>
                     <Button
                       colorScheme="blue"
                       size="sm"
                       mr={2}
-                      //onClick={() => handleEditProduct(product.id)}
                     >
                       Edit
                     </Button>
+                    </Link>
                     <Button
                       colorScheme="red"
                       size="sm"

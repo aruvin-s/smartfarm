@@ -14,6 +14,8 @@ import {
 import Card from "../components/Card/Card.jsx";
 import React, { useState, useEffect } from "react";
 import supabase from '../supabaseClient.js';
+import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function AddProduct() {
   const [productName, setProductName] = useState('');
@@ -21,29 +23,66 @@ export default function AddProduct() {
   const [productWeight, setProductWeight] = useState('');
   const [harvestDate, setHarvestDate] = useState('');
   const [expDate, setExpDate] = useState('');
-  const [productImage, setProductImage] = useState([]);
+  const [productImage, setProductImage] = useState(null);
   const [productDetails, setProductDetails] = useState('');
+  const [imagePreview, setImagePreview] = useState(null);
+  const [productLogs, setProductLogs] = useState('');
+  const [productFreshness, setProductFreshness] = useState('');
 
-  async function uploadImage(e) {
-    const file = e.target.files[0];
+
+  async function uploadImage(file, fileName) {
+
   
-    if (!file) return; // Handle case where no file is selected
-  
-    const { data, error } = await supabase.storage.from('images').upload(file);
-  
+    const { data, error } = await supabase
+        .storage
+        .from('image')
+        .upload(fileName, file);
+
     if (error) {
-      console.error('Error uploading image:', error.message);
+        console.log(error);
     } else {
-      console.log('Image uploaded successfully:', data);
-  
-      // Assuming data.path contains the URL of the uploaded image
-      setProductImage(data.path); // Update the state with the image URL
+        console.log("Image added successfully");
     }
-  }
+}
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setProductImage(file);
+    
+    // Read the image file and set it as the preview
+    const reader = new FileReader();
+    reader.onload = () => {
+        setImagePreview(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (!productImage) {
+        console.error('Please select an image');
+        return;
+    }
+
+    if (expDate - 10 == harvestDate) {
+      setProductFreshness("Tidak Segar")
+    } else {
+      setProductFreshness("Segar")
+    }
+
+    if (productWeight < 50) {
+      setProductLogs("Stok Rendah")
+    } else {
+      setProductLogs("Ditambahkan")
+    }
+
+    const fileName = uuidv4();
+
+    // Upload image before inserting product
+    await uploadImage(productImage, fileName);
+
     const { data, error } = await supabase.from('farmproducts').insert([
         {
             product_name: productName,
@@ -51,8 +90,10 @@ export default function AddProduct() {
             product_weight: productWeight,
             harvest_date: harvestDate,
             exp_date: expDate,
-            product_image: productImage,
-            product_desc: productDetails
+            product_image: fileName, // Using the actual file name here
+            product_desc: productDetails,
+            product_logs: productLogs,
+            product_freshness: productFreshness
         }
     ]);
 
@@ -60,14 +101,14 @@ export default function AddProduct() {
         console.error('Error adding product:', error.message);
     } else {
         console.log('Product added successfully:', data);
-        // Reset form fields after successful submission
         setProductName('');
         setProductCategory('');
         setProductWeight('');
         setHarvestDate('');
         setExpDate('');
-        setProductImage('');
+        setProductImage(null); // Reset image state
         setProductDetails('');
+        setImagePreview(null);
     }
 };
 
@@ -158,17 +199,21 @@ export default function AddProduct() {
                       </Box>
                   </SimpleGrid>
                   <Flex justifyContent="space-between" mb={4}>
-                      <Box width="43%" mb="32px">
-                          <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                  Gambar Produk
+                      <Box width="43%" height="200px" mb="48px">
+                        <Flex>
+                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal" w="50%">
+                                    Gambar Produk
                           </FormLabel>
-                            <Input
-                            onChange={(e) => uploadImage(e)}
-                            height="100%"
-                            fontSize="sm"
-                            type="file"
-                            p="64px"
-                            />
+                          <Input
+                              border="0px solid"
+                              onChange={handleImageChange}
+                              fontSize="sm"
+                              type="file"
+                              />
+                        </Flex>
+                          <Flex border="1px solid" borderColor="gray.200" borderRadius="md" w="100%" h="100%">
+                          {imagePreview && <img src={imagePreview} alt="Preview" style={{objectFit: 'cover',  width: '100%', height: '100%' }} />}
+                          </Flex>
                       </Box>
                       <Box width="55%" mb="32px">
                           <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -195,16 +240,18 @@ export default function AddProduct() {
                       >
                       Tambah Produk
                       </Button>
-                      <Button
-                      fontSize="10px"
-                      variant="dark"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mb="24px"
-                      >
-                      Batal
-                      </Button>
+                      <Link to="/product-list">
+                        <Button
+                        fontSize="10px"
+                        variant="dark"
+                        fontWeight="bold"
+                        w="100%"
+                        h="45"
+                        mb="24px"
+                        >
+                        Batal
+                        </Button>
+                      </Link>
                   </SimpleGrid>
               </FormControl>
             </form>

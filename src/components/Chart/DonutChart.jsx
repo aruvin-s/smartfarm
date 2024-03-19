@@ -23,7 +23,7 @@ class DonutChart extends Component {
           width="100%"
           height="100%"
         />
-        <ul style={{ display: "flex", flexDirection: "column" }}>
+        <ul style={{ display: "flex", flexDirection: "column"}}>
           {labels.map((label, index) => (
             <li key={index}>{label}</li>
           ))}

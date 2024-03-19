@@ -33,7 +33,7 @@ class Bar extends Component {
       // If data.series contains a single series
       series = [
         {
-          name: data.seriesName || "Series 1",
+          name: data.seriesName,
           data: data.series
         }
       ];
@@ -47,7 +47,7 @@ class Bar extends Component {
               options={options}
               series={series}
               type="bar"
-              width="400"
+              width="300"
               height="300"
             />
           </div>

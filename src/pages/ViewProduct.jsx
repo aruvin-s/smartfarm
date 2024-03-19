@@ -14,7 +14,7 @@ import {
 import Card from "../components/Card/Card.jsx";
 import React, { useState, useEffect } from "react";
 import supabase from '../supabaseClient.js';
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 
 export default function ViewProduct() {
   const [loading, setLoading] = useState(true);
@@ -51,10 +51,10 @@ export default function ViewProduct() {
       setProductCategory(data.product_category);
       setProductWeight(data.product_weight);
       setHarvestDate(data.harvest_date);
+      setProductImage(data.product_image);
       setExpDate(data.exp_date);
       setProductDetails(data.product_desc);
       setLoading(false); // Data fetching is complete
-      console.log(data);
     } else {
       console.log("No data found for id:", id);
     }
@@ -63,6 +63,7 @@ export default function ViewProduct() {
     setLoading(false); // Set loading to false in case of error
   }
 }
+
 
 
   if (loading) {
@@ -159,16 +160,15 @@ export default function ViewProduct() {
                       </Box>
                   </SimpleGrid>
                   <Flex justifyContent="space-between" mb={4}>
-                      <Box width="43%" mb="32px">
-                          <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                                  Gambar Produk
+                      <Box width="43%" height="200px" mb="48px">
+                        <Flex>
+                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal" w="50%">
+                                    Gambar Produk
                           </FormLabel>
-                            <Input
-                            height="100%"
-                            fontSize="sm"
-                            type="file"
-                            p="64px"
-                            />
+                        </Flex>
+                          <Flex border="1px solid" borderColor="gray.200" borderRadius="md" w="100%" h="100%">
+                          <img src={`https://dhvxcfkebocmessjqiyt.supabase.co/storage/v1/object/public/image/${productImage}`} alt="Preview" style={{objectFit: 'cover',  width: '100%', height: '100%' }}/>
+                          </Flex>
                       </Box>
                       <Box width="55%" mb="32px">
                           <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
@@ -184,17 +184,31 @@ export default function ViewProduct() {
                       </Box>
                   </Flex>
                   <SimpleGrid columns={2} spacing={2} width="50%">
-                      <Button
-                      fontSize="10px"
-                      bgColor="green.500"
-                      color="white"
-                      fontWeight="bold"
-                      w="100%"
-                      h="45"
-                      mb="24px"
-                      >
-                      Edit Produk
-                      </Button>
+                    <Link to={`/edit-product/${id}`}>
+                        <Button
+                        fontSize="10px"
+                        bgColor="green.500"
+                        color="white"
+                        fontWeight="bold"
+                        w="100%"
+                        h="45"
+                        mb="24px"
+                        >
+                        Ubah Produk
+                        </Button>
+                        <Link to="/product-list">
+                        <Button
+                        fontSize="10px"
+                        variant="dark"
+                        fontWeight="bold"
+                        w="100%"
+                        h="45"
+                        mb="24px"
+                        >
+                        Kembali
+                        </Button>
+                      </Link>
+                    </Link>
                   </SimpleGrid>
               </FormControl>
             </form>
