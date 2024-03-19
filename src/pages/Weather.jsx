@@ -27,9 +27,12 @@ import {
   } from "../components/Icons/Icons.jsx";
 import IconBox from "../components/Icons/IconBox.jsx";
 import Card from "../components/Card/Card.jsx";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
+import { fetchWeatherApi } from 'openmeteo';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import supabase from '../supabaseClient.js';
 
-export default function Dashboard() {
+export default function Weather() {
   const iconBlue = useColorModeValue("green.500", "green.500");
   const iconBoxInside = useColorModeValue("white", "white");
   const textColor = useColorModeValue("gray.700", "white");
@@ -37,7 +40,63 @@ export default function Dashboard() {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const textTableColor = useColorModeValue("gray.500", "white");
 
-  const { colorMode } = useColorMode();
+  const [weatherData, setWeatherData] = useState(null);
+
+  const [weathers, setWeathers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const params = {
+        latitude: -8.65,
+	      longitude: 115.2167,
+        current: ["temperature_2m", "relative_humidity_2m", "wind_speed_10m"],
+        timezone: "auto",
+        forecast_days: 1
+      };
+      const url = "https://api.open-meteo.com/v1/forecast";
+      const responses = await fetchWeatherApi(url, params);
+
+      const response = responses[0];
+
+      const utcOffsetSeconds = response.utcOffsetSeconds();
+      const timezone = response.timezone();
+      const timezoneAbbreviation = response.timezoneAbbreviation();
+      const latitude = response.latitude();
+      const longitude = response.longitude();
+
+      const current = response.current();
+
+      const weatherData = {
+        current: {
+          time: new Date((Number(current.time()) + utcOffsetSeconds) * 1000),
+          temperature2m: current.variables(0).value(),
+          relativeHumidity2m: current.variables(1).value(),
+          windSpeed10m: current.variables(2).value(),
+        }
+      };
+
+      setWeatherData(weatherData);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    getWeathers();
+  }, []);
+
+  async function getWeathers() {
+    try {
+      const { data, error } = await supabase.from("denpasar-monthly").select();
+      if (error) {
+        throw error;
+      }
+  
+      setWeathers(data);
+    } catch (error) {
+      console.error("Error fetching weather:", error.message);
+    }
+  }
 
   return (
     <Flex width="100%">
@@ -68,13 +127,15 @@ export default function Dashboard() {
                         SUHU SAAT INI
                       </StatLabel>
                       <Flex>
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          35 celcius
-                        </StatNumber>
+                      {weatherData && weatherData.current && (
+                          <StatNumber
+                            fontSize="lg"
+                            color={textColor}
+                            fontWeight="bold"
+                          >
+                            {weatherData.current.temperature2m.toFixed(1)} celcius
+                          </StatNumber>
+                        )}
                       </Flex>
                     </Stat>
                     <IconBox
@@ -114,13 +175,15 @@ export default function Dashboard() {
                         KELEMBAPAN UDARA
                       </StatLabel>
                       <Flex>
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          75%
-                        </StatNumber>
+                      {weatherData && weatherData.current && (
+                          <StatNumber
+                            fontSize="lg"
+                            color={textColor}
+                            fontWeight="bold"
+                          >
+                            {weatherData.current.relativeHumidity2m}%
+                          </StatNumber>
+                        )}
                       </Flex>
                     </Stat>
                     <IconBox
@@ -160,13 +223,15 @@ export default function Dashboard() {
                         KECEPATAN ANGIN
                       </StatLabel>
                       <Flex>
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          12 m/s
-                        </StatNumber>
+                      {weatherData && weatherData.current && (
+                          <StatNumber
+                            fontSize="lg"
+                            color={textColor}
+                            fontWeight="bold"
+                          >
+                            {weatherData.current.windSpeed10m.toFixed(1)} Km/h
+                          </StatNumber>
+                        )}
                       </Flex>
                     </Stat>
                     <IconBox
@@ -194,17 +259,16 @@ export default function Dashboard() {
           <Flex direction='column'>
             <Flex align='center' justify='space-between' p='22px'>
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
-                Ramalan Cuaca Bulanan
+                Ramalan Cuaca Bulanan Tahun 2024
               </Text>
-              <Select placeholder='Pilih Lokasi' height='41px' width='186px' fontSize='14px' bg='white'>
-              <option value='option1'>Option 1</option>
-              <option value='option2'>Option 2</option>
-              <option value='option3'>Option 3</option>
+              <Select placeholder='Denpasar' height='41px' width='186px' fontSize='14px' bg='white'>
+              <option value='option1'>Denpasar</option>
+              <option value='option2'>Gianyar</option>
             </Select>
             </Flex>
             <Box overflow={{ sm: "scroll", lg: "hidden" }}>
             <Table>
-                <Thead>
+            <Thead>
                   <Tr bg={tableRowColor}>
                     <Th color='gray.400' borderColor={borderColor}>
                       BULAN
@@ -227,166 +291,34 @@ export default function Dashboard() {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
-                  <Tr key="placeholder">
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      10
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      2023-03-08
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      70 - 80%
-                    </Td>
-                    <Td color='gray.400' borderColor={borderColor}>
-                      Log aktivitas untuk Produk A
-                    </Td>
-                  </Tr>
+                {weathers.length > 0 ? (
+                  weathers.map((weather) => (
+                  <Tr key="id">
+                  <Td color='gray.500' borderColor={borderColor}>
+                  <Link  to={`/weather-weekly/${weather.bulan}`}>
+                    {weather.bulan}
+                    </Link>
+                  </Td>
+                  <Td color='gray.500' borderColor={borderColor}>
+                    {weather.wilayah}
+                  </Td>
+                  <Td color='gray.500' borderColor={borderColor}>
+                    {weather.suhu}
+                  </Td>
+                  <Td color='gray.500' borderColor={borderColor}>
+                    {weather.curah_hujan}
+                  </Td>
+                  <Td color='gray.500' borderColor={borderColor}>
+                    {weather.kelembapan_udara}
+                  </Td>
+                  <Td color='gray.500' borderColor={borderColor}>
+                    {weather.peristiwa_cuaca}
+                  </Td>
+                </Tr>
+                  ))
+                ) : (
+                  <Text>Loading...</Text>
+                )}
                 </Tbody>
               </Table>
             </Box>

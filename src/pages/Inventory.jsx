@@ -44,6 +44,7 @@ export default function Dashboard() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [expiredProductsCount, setExpiredProductsCount] = useState(0);
   const [lowProductsCount, setLowProductsCount] = useState(0);
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   useEffect(() => {
     getProducts();
@@ -53,7 +54,7 @@ export default function Dashboard() {
 
   async function getProducts() {
     try {
-      const { data, error } = await supabase.from("farmproducts").select();
+      const { data, error } = await supabase.from("farmproducts").select().order("product_weight", { ascending: true });
       if (error) {
         throw error;
       }
@@ -69,22 +70,22 @@ export default function Dashboard() {
     }
   }
 
-  async function getSingleProduct(name) {
+  async function handleProductSelect(productName) {
     try {
       const { data, error } = await supabase
         .from("farmproducts")
         .select("*")
-        .eq("product_name", name)
+        .eq("product_name", productName)
         .single();
-      
+  
       if (error) {
         throw error;
       }
-      
+  
       if (data) {
-        
+        setSelectedProduct(data);
       } else {
-        console.log("No data found for id:", name);
+        console.log("No data found for product:", productName);
       }
     } catch (error) {
       console.error("Error fetching product:", error.message);
@@ -98,7 +99,7 @@ export default function Dashboard() {
         .select()
         .eq("product_logs", "Kadaluwarsa")
         .order("product_weight", { ascending: false })
-        .limit(4);;
+        .limit(4);
   
       if (error) {
         throw error;
@@ -148,7 +149,7 @@ export default function Dashboard() {
   const chartLabels = months;
 
   products.forEach((product) => {
-    const createdAt = new Date(product.created_at);
+    const createdAt = new Date(product.harvest_date);
     const monthIndex = createdAt.getMonth();
     chartData[monthIndex] += product.product_weight;
   });
@@ -174,6 +175,9 @@ export default function Dashboard() {
   const lowCategories = lowProducts.map((low) => [low.product_name]);
   const lowSeries = lowProducts.map((low) => low.product_weight);
 
+  const mostCategories = products.slice(-4).map((most) => [most.product_name]);
+  const mostSeries = products.slice(-4).map((most) => most.product_weight);
+
   const expProductsData = {
     categories: expCategories,
     series: expSeries
@@ -182,6 +186,11 @@ export default function Dashboard() {
   const lowProductsData = {
     categories: lowCategories,
     series: lowSeries
+  }
+
+  const mostProductsData =  {
+    categories: mostCategories.reverse(),
+    series: mostSeries.reverse()
   }
 
   return (
@@ -345,10 +354,10 @@ export default function Dashboard() {
               <Flex direction="column" align="center">
                 <Flex width="100%">
                    <Text fontSize='lg' color={textColor} fontWeight='bold'>
-                        Produk Berdasarkan Kategori
+                        Produk Berdasarkan Jenis
                     </Text>
                 </Flex>
-                    <HorizontalChart data={expProductsData} />
+                    <HorizontalChart data={mostProductsData} />
                 </Flex>
               </Card>
               <Card minH="410px">
@@ -396,7 +405,15 @@ export default function Dashboard() {
                    <Text fontSize='lg' color={textColor} fontWeight='bold' w="50%">
                         Ringkasan Produk
                     </Text>
-                    <Select placeholder='Pilih Kategori Produk' fontSize='14px' bg='white' size="sm" w="40%">
+                    <Select
+                      placeholder="Pilih Kategori Produk"
+                      fontSize="14px"
+                      bg="white"
+                      borderRadius="md"
+                      size="sm"
+                      w="40%"
+                      onChange={(event) => handleProductSelect(event.target.value)}
+                    >
                       {products.map((product) => (
                         <option key={product.id} value={product.product_name}>
                           {product.product_name}

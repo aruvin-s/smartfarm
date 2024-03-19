@@ -30,10 +30,9 @@ import {
     GlobeIcon,
     WalletIcon,
   } from "../components/Icons/Icons.jsx";
-import IconBox from "../components/Icons/IconBox.jsx";
 import Card from "../components/Card/Card.jsx";
-import Sidebar from "../components/Sidebar/Sidebar.jsx";
-import { SearchBar }from "../components/SearchBar/SearchBar.jsx";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -43,18 +42,10 @@ export default function Dashboard() {
   const borderColor = useColorModeValue("gray.200", "gray.600");
   const textTableColor = useColorModeValue("gray.500", "white");
 
-  const chartData = [44, 55, 41, 17, 15];
-  const chartOptions = {
-    labels: ["Tomato", "Potato", "Carrot", "Cabbage", "Apple"],
-    legend: {
-      position: 'bottom',
-      horizontalAlign: 'center',
-      offsetY: 10, // Adjust as needed to vertically position the legend labels
-      itemMargin: {
-        vertical: 5 // Adjust as needed to increase or decrease spacing between legend items
-      }
-    }
-  };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [lahan, setLahan] = useState("");
+  const [lokasi, setLokasi] = useState("");
   
   
 
@@ -72,51 +63,12 @@ export default function Dashboard() {
                 <SimpleGrid columns={2} spacing={2}>
                     <Box>
                         <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Nama
+                        Email
                         </FormLabel>
                         <Input
-                        variant="auth"
-                        fontSize="sm"
-                        ms="4px"
-                        type="text"
-                        placeholder="@johndoe"
-                        mb="24px"
-                        size="lg"
-                        />
-                    </Box>
-                    <Box>
-                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                            Nama Sawah
-                        </FormLabel>
-                        <Input
-                        variant="auth"
-                        fontSize="sm"
-                        ms="4px"
-                        type="text"
-                        placeholder="@johndoe"
-                        mb="24px"
-                        size="lg"
-                        />
-                    </Box>
-                    <Box>
-                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Username
-                        </FormLabel>
-                        <Input
-                        variant="auth"
-                        fontSize="sm"
-                        ms="4px"
-                        type="text"
-                        placeholder="@johndoe"
-                        mb="24px"
-                        size="lg"
-                        />
-                    </Box>
-                    <Box>
-                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
-                        Lokasi Sawah
-                        </FormLabel>
-                        <Input
+                        isReadOnly="true"
+                        value="wiraprathamaalvin@gmail.com"
+                        onChange={(e) => setEmail(e.target.value)}
                         variant="auth"
                         fontSize="sm"
                         ms="4px"
@@ -131,6 +83,43 @@ export default function Dashboard() {
                         Password
                         </FormLabel>
                         <Input
+                        isReadOnly="true"
+                        value="denpasar"
+                        onChange={(e) => setPassword(e.target.value)}
+                        variant="auth"
+                        fontSize="sm"
+                        ms="4px"
+                        type="password"
+                        placeholder="@johndoe"
+                        mb="24px"
+                        size="lg"
+                        />
+                    </Box>
+                    <Box>
+                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                            Nama Lahan
+                        </FormLabel>
+                        <Input
+                        isReadOnly="true"
+                        value="Sawah Hijau"
+                        onChange={(e) => setLahan(e.target.value)}
+                        variant="auth"
+                        fontSize="sm"
+                        ms="4px"
+                        type="text"
+                        placeholder="@johndoe"
+                        mb="24px"
+                        size="lg"
+                        />
+                    </Box>
+                    <Box>
+                        <FormLabel ms="4px" fontSize="sm" fontWeight="normal">
+                        Lokasi Lahan
+                        </FormLabel>
+                        <Input
+                        isReadOnly="true"
+                        value="Jalan Gajah Waktra blok VII no 1"
+                        onChange={(e) => setLokasi(e.target.value)}
                         variant="auth"
                         fontSize="sm"
                         ms="4px"
