@@ -38,7 +38,7 @@ const Register = () => {
         console.log('Register Success', data);
         setEmail('');
         setPassword('');
-        navigate('/login');
+        navigate('/');
     }
   };
 
@@ -145,7 +145,7 @@ const Register = () => {
           >
             <Text color={textColor} fontWeight="medium">
               Sudah punya akun?
-              <Link color={titleColor} as="span" ms="5px"  to="/login" fontWeight="bold">
+              <Link color={titleColor} as="span" ms="5px"  to="/" fontWeight="bold">
                 Masuk
               </Link>
             </Text>

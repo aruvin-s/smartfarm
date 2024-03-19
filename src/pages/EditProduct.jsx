@@ -9,7 +9,15 @@ import {
     Input,
     Textarea,
     InputGroup,
-    InputRightAddon
+    InputRightAddon,
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalBody,
+    ModalFooter,
+    ModalCloseButton,
+    useDisclosure
   } from "@chakra-ui/react";
 import Card from "../components/Card/Card.jsx";
 import React, { useState, useEffect } from "react";
@@ -17,7 +25,8 @@ import supabase from '../supabaseClient.js';
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-export default function AddProduct() {
+export default function EditProduct() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(true);
   const [productName, setProductName] = useState('');
   const [productCategory, setProductCategory] = useState('');
@@ -244,6 +253,23 @@ export default function AddProduct() {
         </Card>
         </Flex>
       </Flex>
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <ModalOverlay />
+                <ModalContent>
+                      <ModalHeader>Perbaharui Produk</ModalHeader>
+                        <ModalCloseButton />
+                            <ModalBody>
+                                Apakah anda yakin untuk memperbaharui produk ini?
+                            </ModalBody>
+
+                            <ModalFooter>
+                              <Button mr={3} onClick={onClose}>
+                                Batal
+                              </Button>
+                              <Button bgColor="#38A169" color="white">Perbaharui</Button>
+                        </ModalFooter>
+                  </ModalContent>
+          </Modal>
     </Flex>
   );
 }

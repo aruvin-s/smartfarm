@@ -17,7 +17,8 @@ import {
     Tr,
     useColorMode,
     useColorModeValue,
-    Select
+    Select,
+    Tooltip
   } from "@chakra-ui/react";
 import {
     CartIcon,
@@ -295,9 +296,11 @@ export default function Weather() {
                   weathers.map((weather) => (
                   <Tr key="id">
                   <Td color='gray.500' borderColor={borderColor}>
-                  <Link  to={`/weather-weekly/${weather.bulan}`}>
-                    {weather.bulan}
-                    </Link>
+                    <Tooltip hasArrow label="Klik disini untuk melihat cuaca mingguan">
+                      <Link  to={`/weather-weekly/${weather.bulan}`}>
+                        {weather.bulan}
+                        </Link>
+                    </Tooltip>
                   </Td>
                   <Td color='gray.500' borderColor={borderColor}>
                     {weather.wilayah}

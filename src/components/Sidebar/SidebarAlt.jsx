@@ -14,7 +14,8 @@ import {
   Text,
   useColorMode,
   useColorModeValue,
-  useDisclosure
+  useDisclosure,
+  Tooltip
 } from "@chakra-ui/react";
 import IconBox from "../Icons/IconBox";
 import {
@@ -63,7 +64,7 @@ const SidebarAlt = () => {
 
 
   return (
-    <Box display={{ sm: "none", xl: "block" }} position="fixed">
+    <Box display={{ sm: "none", xl: "block" }} position="fixed" bottom="0">
       <Box
         bg={sidebarBg}
         transition={variantChange}
@@ -246,10 +247,12 @@ const SidebarAlt = () => {
             </Link>
             </Box>
           </Stack>
-          <Box width="100%" textAlign="center"> {/* Container for the button */}
-            <Button variant='danger' maxH='30px' w="80%">
-              Keluar
-            </Button>
+          <Box width="100%" textAlign="center" > {/* Container for the button */}
+          <Link to="/">
+            <Button variant='danger' maxH='30px' w="80%" mt="160px">
+                Keluar
+              </Button>
+          </Link>
           </Box>
         </Scrollbars>
       </Box>

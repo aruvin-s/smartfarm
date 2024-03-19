@@ -39,7 +39,7 @@ export function SearchBar(props) {
         variant='search'
         fontSize='xs'
         bg={inputBg}
-        placeholder='Type here...'
+        placeholder='Cari produk'
       />
     </InputGroup>
   );

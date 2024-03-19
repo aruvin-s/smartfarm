@@ -17,7 +17,8 @@ import {
     Tr,
     useColorMode,
     useColorModeValue,
-    Tag
+    Tag,
+    Tooltip,
   } from "@chakra-ui/react";
 import {
     CartIcon,
@@ -269,9 +270,11 @@ export default function Dashboard() {
                   products.slice(-7).reverse().map((product) => (
                       <Tr key="id">
                     <Td color='gray.500' borderColor={borderColor}>
-                      <Link to={`/view-product/${product.id}`}>
-                      {product.product_name}
-                      </Link>
+                      <Tooltip hasArrow label="Klik disini untuk membuka produk">
+                        <Link to={`/view-product/${product.id}`}>
+                        {product.product_name}
+                        </Link>
+                      </Tooltip>
                     </Td>
                     <Td color='gray.500' borderColor={borderColor}>
                       {product.product_weight}
@@ -311,11 +314,13 @@ export default function Dashboard() {
               <Text fontSize='lg' color={textColor} fontWeight='bold'>
                 Data Penyimpanan
               </Text>
+              <Tooltip hasArrow label="Klik disini untuk melihat semua produk">
               <Link to="/product-list">
                 <Button variant='dark' maxH='30px'>
                   SEE ALL
                 </Button>
               </Link>
+              </Tooltip>
             </Flex>
             <Box overflow="hidden" width="100%" height="100%">
                 {/* Adjusted width and height */}

@@ -17,8 +17,8 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route exact path="/" element={<Admin><Dashboard /></Admin>}/>
-        <Route exact path="/login" element={<Login />}/>
+        <Route exact path="/dashboard" element={<Admin><Dashboard /></Admin>}/>
+        <Route exact path="/" element={<Login />}/>
         <Route exact path="/register" element={<Register/>}/>
         <Route exact path="/product-list" element={<Admin><ProductList /></Admin>}/>
         <Route exact path="/add-product" element={<Admin><AddProduct /></Admin>}/>

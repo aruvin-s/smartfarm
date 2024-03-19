@@ -39,7 +39,7 @@ const Login = () => {
         console.log('Login Success', data);
         setEmail('');
         setPassword('');
-        navigate('/');
+        navigate('/dashboard');
     }
   };
 

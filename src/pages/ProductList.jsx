@@ -19,7 +19,16 @@ import {
   useColorMode,
   useColorModeValue,
   Select,
-  Tag
+  Tag,
+  Tooltip,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
 import {
   CartIcon,
@@ -34,6 +43,7 @@ import { Link } from "react-router-dom";
 import supabase from '../supabaseClient.js';
 
 export default function ProductList() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -43,6 +53,14 @@ export default function ProductList() {
   const textColor = useColorModeValue("gray.700", "white");
   const tableRowColor = useColorModeValue("#F7FAFC", "navy.900");
   const borderColor = useColorModeValue("gray.200", "gray.600");
+
+  const [selectedProductId, setSelectedProductId] = useState(null);
+
+// Function to set the selected product ID
+  const setSelectedProduct = (productId) => {
+    setSelectedProductId(productId);
+    onOpen(); // Open the modal
+  };
 
   useEffect(() => {
     if (selectedFilter === 'Kadaluwarsa') {
@@ -113,6 +131,7 @@ export default function ProductList() {
       console.error('Error delete product', error.message);
     } else {
       console.log('Product deleted', data);
+      onClose();
       getProducts();
     }
   };
@@ -154,11 +173,13 @@ export default function ProductList() {
           </Select>
           <Flex>
             <SearchBar me={5} onChange={handleSearchInputChange} value={searchQuery} />
-            <Link to="/add-product">
-              <Button variant='dark' height='41px' width='186px'>
-                Tambah Produk
-              </Button>
-            </Link>
+            <Tooltip hasArrow label="Klik disini untuk menambah produk">
+              <Link to="/add-product">
+                <Button variant='dark' height='41px' width='186px'>
+                  Tambah Produk
+                </Button>
+              </Link>
+            </Tooltip>
           </Flex>
         </Flex>
         <Flex width="100%" justifyContent="space-between" mt={5}>
@@ -197,9 +218,11 @@ export default function ProductList() {
                     {filteredProducts.map((product) => (
                       <Tr key={product.id}>
                           <Td color='gray.500' borderColor={borderColor}>
-                          <Link to={`/view-product/${product.id}`}>
-                          {product.product_name}
-                          </Link>
+                          <Tooltip hasArrow label="Klik disini untuk membuka produk">
+                            <Link to={`/view-product/${product.id}`}>
+                            {product.product_name}
+                            </Link>
+                          </Tooltip>
                         </Td>
                         <Td color='gray.500' borderColor={borderColor}>{product.product_weight}</Td>
                         <Td color='gray.500' borderColor={borderColor}>{product.product_freshness}</Td>
@@ -208,9 +231,13 @@ export default function ProductList() {
                         <Td>
                           <Flex>
                             <Link to={`/edit-product/${product.id}`}>
-                              <Button colorScheme="blue" size="sm" mr={2}>Edit</Button>
+                              <Tooltip hasArrow label="Klik disini untuk mengubah detail produk">
+                                <Button colorScheme="blue" size="sm" mr={2}>Ubah</Button>
+                              </Tooltip>
                             </Link>
-                            <Button colorScheme="red" size="sm" onClick={() => handleDeleteProduct(product.id)}>Delete</Button>
+                            <Tooltip hasArrow label="Klik disini untuk menghapus produk">
+                              <Button colorScheme="red" size="sm" onClick={() => setSelectedProduct(product.id)}>Delete</Button>
+                            </Tooltip>
                           </Flex>
                         </Td>
                       </Tr>
@@ -222,6 +249,23 @@ export default function ProductList() {
           </Card>
         </Flex>
       </Flex>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <ModalOverlay />
+                <ModalContent>
+                      <ModalHeader>Hapus Produk</ModalHeader>
+                        <ModalCloseButton />
+                            <ModalBody>
+                                Apakah anda yakin untuk menghapus produk ini?
+                            </ModalBody>
+
+                            <ModalFooter>
+                              <Button mr={3} onClick={onClose}>
+                                Batal
+                              </Button>
+                              <Button bgColor="red.600" color="white" onClick={() => handleDeleteProduct(selectedProductId)} >Hapus</Button>
+                        </ModalFooter>
+                  </ModalContent>
+          </Modal>
     </Flex>
   );
 }

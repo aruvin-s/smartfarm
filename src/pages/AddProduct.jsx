@@ -9,7 +9,7 @@ import {
     Input,
     Textarea,
     InputGroup,
-    InputRightAddon
+    InputRightAddon,
   } from "@chakra-ui/react";
 import Card from "../components/Card/Card.jsx";
 import React, { useState, useEffect } from "react";
