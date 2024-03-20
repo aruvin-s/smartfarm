@@ -107,7 +107,7 @@ const Login = () => {
               variant="auth"
               fontSize="sm"
               ms="4px"
-              type="text"
+              type="password"
               placeholder="Masukkan sandi anda"
               mb="24px"
               size="lg"

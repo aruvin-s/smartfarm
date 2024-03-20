@@ -67,15 +67,15 @@ export default function AddProduct() {
     }
 
     if (expDate - 10 == harvestDate) {
-      setProductFreshness("Tidak Segar")
+      setProductFreshness("Tidak Segar");
     } else {
-      setProductFreshness("Segar")
+      setProductFreshness("Segar");
     }
 
     if (productWeight < 50) {
-      setProductLogs("Stok Rendah")
+      setProductLogs("Stok Rendah");
     } else {
-      setProductLogs("Ditambahkan")
+      setProductLogs("Ditambahkan");
     }
 
     const fileName = uuidv4();
@@ -108,6 +108,7 @@ export default function AddProduct() {
         setExpDate('');
         setProductImage(null); // Reset image state
         setProductDetails('');
+        setProductLogs('');
         setImagePreview(null);
     }
 };

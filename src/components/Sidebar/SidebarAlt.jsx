@@ -107,7 +107,7 @@ const SidebarAlt = () => {
           <Box>{brand}</Box>
           <Stack direction="column" mb="40px">
           <Box>
-          <Link to="/">
+          <Link to="/dashboard">
               <Button
                   boxSize="initial"
                   justifyContent="flex-start"
