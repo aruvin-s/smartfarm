@@ -33,6 +33,7 @@ import DonutChart from "../components/Chart/DonutChart.jsx";
 import supabase from '../supabaseClient.js';
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { MaterialSymbol } from 'react-material-symbols';
 
 export default function Dashboard() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -134,7 +135,7 @@ export default function Dashboard() {
                               w={"45px"}
                               bg={iconBlue}
                             >
-                              <WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                              <MaterialSymbol icon="nutrition" size={20} fill  color='white' />
                             </IconBox>
                           </Flex>
                           <Text color="gray.500" fontSize="sm">
@@ -180,7 +181,7 @@ export default function Dashboard() {
                               w={"45px"}
                               bg="#E53E3E"
                             >
-                              <GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                              <MaterialSymbol icon="brightness_alert" size={20} fill  color='white' />
                             </IconBox>
                           </Flex>
                           <Text color="gray.500" fontSize="sm">
@@ -226,7 +227,7 @@ export default function Dashboard() {
                               w={"45px"}
                               bg="#DD6B20"
                             >
-                              <DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                              <MaterialSymbol icon="inventory_2" size={20} fill  color='white' />
                             </IconBox>
                           </Flex>
                           <Text color="gray.500" fontSize="sm">
@@ -239,7 +240,7 @@ export default function Dashboard() {
                       </Card>
             </SimpleGrid>
         </Flex>
-        <Flex width="100%" height="73%" justifyContent="space-between">
+        <Flex width="100%" justifyContent="space-between">
         <Card p='0px' maxW={{ sm: "320px", md: "70%", lg: "70%" }}>
           <Flex direction='column'>
             <Flex align='center' justify='space-between' p='22px'>

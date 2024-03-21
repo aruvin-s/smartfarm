@@ -23,7 +23,7 @@ import Card from "../components/Card/Card.jsx";
 import React, { useState, useEffect } from "react";
 import supabase from '../supabaseClient.js';
 import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function EditProduct() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -35,6 +35,8 @@ export default function EditProduct() {
   const [expDate, setExpDate] = useState('');
   const [productImage, setProductImage] = useState('');
   const [productDetails, setProductDetails] = useState('');
+
+  const navigate = useNavigate();
 
   const { id } = useParams();
 
@@ -71,6 +73,7 @@ export default function EditProduct() {
         setProductImage('');
         setProductDetails('');
         getProducts(id);
+        navigate('/product-list');
     }
 };
 

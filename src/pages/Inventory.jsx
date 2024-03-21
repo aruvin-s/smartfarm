@@ -33,6 +33,7 @@ import HorizontalChart from "../components/Chart/HorizontalChart.jsx";
 import supabase from '../supabaseClient.js';
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { MaterialSymbol } from 'react-material-symbols';
 
 export default function Dashboard() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -197,7 +198,7 @@ export default function Dashboard() {
     <Flex>
       <Flex direction="column" ml={300} width="80%" height="100vh">
         <Flex>
-          <SimpleGrid
+        <SimpleGrid
                       columns={{ sm: 1, md: 2, xl: 3 }}
                       spacing="24px"
                       mb="20px"
@@ -238,7 +239,7 @@ export default function Dashboard() {
                               w={"45px"}
                               bg={iconBlue}
                             >
-                              <WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                              <MaterialSymbol icon="nutrition" size={20} fill  color='white' />
                             </IconBox>
                           </Flex>
                           <Text color="gray.500" fontSize="sm">
@@ -284,7 +285,7 @@ export default function Dashboard() {
                               w={"45px"}
                               bg="#E53E3E"
                             >
-                              <GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                              <MaterialSymbol icon="brightness_alert" size={20} fill  color='white' />
                             </IconBox>
                           </Flex>
                           <Text color="gray.500" fontSize="sm">
@@ -330,7 +331,7 @@ export default function Dashboard() {
                               w={"45px"}
                               bg="#DD6B20"
                             >
-                              <DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                              <MaterialSymbol icon="inventory_2" size={20} fill  color='white' />
                             </IconBox>
                           </Flex>
                           <Text color="gray.500" fontSize="sm">
@@ -341,7 +342,7 @@ export default function Dashboard() {
                           </Text>
                         </Flex>
                       </Card>
-          </SimpleGrid>
+            </SimpleGrid>
         </Flex>
         <Flex>
         <SimpleGrid

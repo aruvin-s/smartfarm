@@ -31,6 +31,7 @@ import { fetchWeatherApi } from 'openmeteo';
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import supabase from '../supabaseClient.js';
+import { MaterialSymbol } from 'react-material-symbols';
 
 export default function WeatherWeekly() {
 const iconBlue = useColorModeValue("green.500", "green.500");
@@ -104,159 +105,159 @@ return (
   <Flex width="100%">
     <Flex direction="column" ml={300} width="100%">
       <Flex>
-        <SimpleGrid
-            columns={{ sm: 1, md: 2, xl: 3 }}
-            spacing="24px"
-            mb="20px"
-            width="100%"
-          >
-            <Card minH="125px">
-              <Flex direction="column">
-                <Flex
-                  flexDirection="row"
-                  align="center"
-                  justify="center"
-                  w="100%"
-                  mb="25px"
-                >
-                  <Stat me="auto">
-                    <StatLabel
-                      fontSize="xs"
-                      color="gray.400"
-                      fontWeight="bold"
-                      textTransform="uppercase"
-                    >
-                      SUHU SAAT INI
-                    </StatLabel>
-                    <Flex>
-                    {weatherData && weatherData.current && (
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          {weatherData.current.temperature2m.toFixed(1)} celcius
-                        </StatNumber>
-                      )}
-                    </Flex>
-                  </Stat>
-                  <IconBox
-                    borderRadius="50%"
-                    as="box"
-                    h={"45px"}
-                    w={"45px"}
-                    bg={iconBlue}
+      <SimpleGrid
+              columns={{ sm: 1, md: 2, xl: 3 }}
+              spacing="24px"
+              mb="20px"
+              width="100%"
+            >
+              <Card minH="125px">
+                <Flex direction="column">
+                  <Flex
+                    flexDirection="row"
+                    align="center"
+                    justify="center"
+                    w="100%"
+                    mb="25px"
                   >
-                    <WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />
-                  </IconBox>
-                </Flex>
-                <Text color="gray.400" fontSize="sm">
-                  <Text as="span" color="green.400" fontWeight="bold">
-                    +3.48%{" "}
-                  </Text>
-                  Sejak bulan lalu
-                </Text>
-              </Flex>
-            </Card>
-            <Card minH="125px">
-              <Flex direction="column">
-                <Flex
-                  flexDirection="row"
-                  align="center"
-                  justify="center"
-                  w="100%"
-                  mb="25px"
-                >
-                  <Stat me="auto">
-                    <StatLabel
-                      fontSize="xs"
-                      color="gray.400"
-                      fontWeight="bold"
-                      textTransform="uppercase"
+                    <Stat me="auto">
+                      <StatLabel
+                        fontSize="xs"
+                        color="gray.400"
+                        fontWeight="bold"
+                        textTransform="uppercase"
+                      >
+                        SUHU SAAT INI
+                      </StatLabel>
+                      <Flex>
+                      {weatherData && weatherData.current && (
+                          <StatNumber
+                            fontSize="lg"
+                            color={textColor}
+                            fontWeight="bold"
+                          >
+                            {weatherData.current.temperature2m.toFixed(1)} celcius
+                          </StatNumber>
+                        )}
+                      </Flex>
+                    </Stat>
+                    <IconBox
+                      borderRadius="50%"
+                      as="box"
+                      h={"45px"}
+                      w={"45px"}
+                      bg={iconBlue}
                     >
-                      KELEMBAPAN UDARA
-                    </StatLabel>
-                    <Flex>
-                    {weatherData && weatherData.current && (
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          {weatherData.current.relativeHumidity2m}%
-                        </StatNumber>
-                      )}
-                    </Flex>
-                  </Stat>
-                  <IconBox
-                    borderRadius="50%"
-                    as="box"
-                    h={"45px"}
-                    w={"45px"}
-                    bg="#E53E3E"
-                  >
-                    <GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />
-                  </IconBox>
-                </Flex>
-                <Text color="gray.400" fontSize="sm">
-                  <Text as="span" color="green.400" fontWeight="bold">
-                    +5.2%{" "}
+                      <MaterialSymbol icon="device_thermostat" size={20} fill  color='white' />
+                    </IconBox>
+                  </Flex>
+                  <Text color="gray.400" fontSize="sm">
+                    <Text as="span" color="green.400" fontWeight="bold">
+                      +3.48%{" "}
+                    </Text>
+                    Sejak bulan lalu
                   </Text>
-                  Sejak bulan lalu
-                </Text>
-              </Flex>
-            </Card>
-            <Card minH="125px">
-              <Flex direction="column">
-                <Flex
-                  flexDirection="row"
-                  align="center"
-                  justify="center"
-                  w="100%"
-                  mb="25px"
-                >
-                  <Stat me="auto">
-                    <StatLabel
-                      fontSize="xs"
-                      color="gray.400"
-                      fontWeight="bold"
-                      textTransform="uppercase"
+                </Flex>
+              </Card>
+              <Card minH="125px">
+                <Flex direction="column">
+                  <Flex
+                    flexDirection="row"
+                    align="center"
+                    justify="center"
+                    w="100%"
+                    mb="25px"
+                  >
+                    <Stat me="auto">
+                      <StatLabel
+                        fontSize="xs"
+                        color="gray.400"
+                        fontWeight="bold"
+                        textTransform="uppercase"
+                      >
+                        KELEMBAPAN UDARA
+                      </StatLabel>
+                      <Flex>
+                      {weatherData && weatherData.current && (
+                          <StatNumber
+                            fontSize="lg"
+                            color={textColor}
+                            fontWeight="bold"
+                          >
+                            {weatherData.current.relativeHumidity2m}%
+                          </StatNumber>
+                        )}
+                      </Flex>
+                    </Stat>
+                    <IconBox
+                      borderRadius="50%"
+                      as="box"
+                      h={"45px"}
+                      w={"45px"}
+                      bg="#E53E3E"
                     >
-                      KECEPATAN ANGIN
-                    </StatLabel>
-                    <Flex>
-                    {weatherData && weatherData.current && (
-                        <StatNumber
-                          fontSize="lg"
-                          color={textColor}
-                          fontWeight="bold"
-                        >
-                          {weatherData.current.windSpeed10m.toFixed(1)} Km/h
-                        </StatNumber>
-                      )}
-                    </Flex>
-                  </Stat>
-                  <IconBox
-                    borderRadius="50%"
-                    as="box"
-                    h={"45px"}
-                    w={"45px"}
-                    bg="#DD6B20"
-                  >
-                    <DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />
-                  </IconBox>
-                </Flex>
-                <Text color="gray.400" fontSize="sm">
-                  <Text as="span" color="red.500" fontWeight="bold">
-                    -2.82%{" "}
+                      <MaterialSymbol icon="humidity_high" size={20} fill  color='white' />
+                    </IconBox>
+                  </Flex>
+                  <Text color="gray.400" fontSize="sm">
+                    <Text as="span" color="green.400" fontWeight="bold">
+                      +5.2%{" "}
+                    </Text>
+                    Sejak bulan lalu
                   </Text>
-                  Sejak bulan lalu
-                </Text>
-              </Flex>
-            </Card>
-        </SimpleGrid>
+                </Flex>
+              </Card>
+              <Card minH="125px">
+                <Flex direction="column">
+                  <Flex
+                    flexDirection="row"
+                    align="center"
+                    justify="center"
+                    w="100%"
+                    mb="25px"
+                  >
+                    <Stat me="auto">
+                      <StatLabel
+                        fontSize="xs"
+                        color="gray.400"
+                        fontWeight="bold"
+                        textTransform="uppercase"
+                      >
+                        KECEPATAN ANGIN
+                      </StatLabel>
+                      <Flex>
+                      {weatherData && weatherData.current && (
+                          <StatNumber
+                            fontSize="lg"
+                            color={textColor}
+                            fontWeight="bold"
+                          >
+                            {weatherData.current.windSpeed10m.toFixed(1)} Km/h
+                          </StatNumber>
+                        )}
+                      </Flex>
+                    </Stat>
+                    <IconBox
+                      borderRadius="50%"
+                      as="box"
+                      h={"45px"}
+                      w={"45px"}
+                      bg="#DD6B20"
+                    >
+                      <MaterialSymbol icon="air" size={20} fill  color='white' />
+                    </IconBox>
+                  </Flex>
+                  <Text color="gray.400" fontSize="sm">
+                    <Text as="span" color="red.500" fontWeight="bold">
+                      -2.82%{" "}
+                    </Text>
+                    Sejak bulan lalu
+                  </Text>
+                </Flex>
+              </Card>
+          </SimpleGrid>
       </Flex>
-      <Flex width="100%" justifyContent="space-between">
+      <Flex width="100%" justifyContent="space-between" flexDirection="column">
       <Card p='0px' >
         <Flex direction='column'>
           <Flex align='center' justify='space-between' p='22px'>
@@ -326,6 +327,18 @@ return (
           </Box>
         </Flex>
       </Card>
+      <Link to="/weather">
+                        <Button
+                        fontSize="10px"
+                        variant="dark"
+                        fontWeight="bold"
+                        w="30%"
+                        h="45"
+                        mt="24px"
+                        >
+                        Kembali
+                        </Button>
+                      </Link>
       </Flex>
     </Flex>
   </Flex>

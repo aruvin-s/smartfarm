@@ -14,7 +14,7 @@ import {
 import Card from "../components/Card/Card.jsx";
 import React, { useState, useEffect } from "react";
 import supabase from '../supabaseClient.js';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from 'uuid';
 
 export default function AddProduct() {
@@ -26,9 +26,10 @@ export default function AddProduct() {
   const [productImage, setProductImage] = useState(null);
   const [productDetails, setProductDetails] = useState('');
   const [imagePreview, setImagePreview] = useState(null);
-  const [productLogs, setProductLogs] = useState('');
-  const [productFreshness, setProductFreshness] = useState('');
+  const [productLogs, setProductLogs] = useState('Ditambahkan');
+  const [productFreshness, setProductFreshness] = useState('Segar');
 
+  const navigate = useNavigate();
 
   async function uploadImage(file, fileName) {
 
@@ -66,17 +67,19 @@ export default function AddProduct() {
         return;
     }
 
-    if (expDate - 10 == harvestDate) {
-      setProductFreshness("Tidak Segar");
-    } else {
-      setProductFreshness("Segar");
-    }
-
     if (productWeight < 50) {
       setProductLogs("Stok Rendah");
-    } else {
+  } else {
       setProductLogs("Ditambahkan");
-    }
+  }
+
+  // Assuming productFreshness is a Date object
+  const currentDate = new Date();
+  if (productFreshness > currentDate.getTime()) {
+      setProductFreshness("Segar");
+  } else {
+      setProductFreshness("Tidak Segar");
+  }
 
     const fileName = uuidv4();
 
@@ -110,6 +113,7 @@ export default function AddProduct() {
         setProductDetails('');
         setProductLogs('');
         setImagePreview(null);
+        navigate('/product-list');
     }
 };
 
