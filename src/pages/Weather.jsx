@@ -32,6 +32,7 @@ import { fetchWeatherApi } from 'openmeteo';
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import supabase from '../supabaseClient.js';
+import { MaterialSymbol } from 'react-material-symbols';
 
 export default function Weather() {
   const iconBlue = useColorModeValue("green.500", "green.500");
@@ -146,7 +147,7 @@ export default function Weather() {
                       w={"45px"}
                       bg={iconBlue}
                     >
-                      <WalletIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                      <MaterialSymbol icon="device_thermostat" size={20} fill  color='white' />
                     </IconBox>
                   </Flex>
                   <Text color="gray.400" fontSize="sm">
@@ -194,7 +195,7 @@ export default function Weather() {
                       w={"45px"}
                       bg="#E53E3E"
                     >
-                      <GlobeIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                      <MaterialSymbol icon="humidity_high" size={20} fill  color='white' />
                     </IconBox>
                   </Flex>
                   <Text color="gray.400" fontSize="sm">
@@ -242,7 +243,7 @@ export default function Weather() {
                       w={"45px"}
                       bg="#DD6B20"
                     >
-                      <DocumentIcon h={"24px"} w={"24px"} color={iconBoxInside} />
+                      <MaterialSymbol icon="air" size={20} fill  color='white' />
                     </IconBox>
                   </Flex>
                   <Text color="gray.400" fontSize="sm">
